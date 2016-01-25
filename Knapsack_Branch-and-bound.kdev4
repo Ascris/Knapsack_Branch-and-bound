@@ -1,0 +1,4 @@
+[Project]
+Name=Knapsack_Branch-and-bound
+Manager=KDevCustomMakeManager
+VersionControl=kdevgit
