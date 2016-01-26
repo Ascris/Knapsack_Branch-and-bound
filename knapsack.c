@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <sys/timeb.h>
+#include <string.h>
 
 #include "./structures/item.h"
 #include "./structures/queue.h"
@@ -9,19 +10,140 @@
 
 char verbose; /* 'v' for verbose */
 
-/*********************************************************/
-/*                     loadInstance                      */
-/*********************************************************/
-/* This function opens file *filename, reads *n, the     */
-/* number of items, *b the knapsack capacity, and        */
-/* allocates memory for *it, an array of *n item data    */
-/* structures.                                           */
-/*********************************************************/
+int get_file_size(char *filename)
+{
+   FILE *fp;
+   int file_size;
+   file_size = 0;
+   if ((fp = fopen(filename, "rb" )) == NULL) {
+      fprintf(stderr, "Cannot open %s.\n", filename);
+      return(file_size);
+   }
+   char ligne[30];
+   while(fgets(ligne, 30,fp) != NULL)
+    {
+	    file_size++;
+    }
+   fclose(fp);
+   return(file_size);
+}
+
+
+char** str_split(char* a_str, const char a_delim)
+{
+    char** result    = 0;
+    size_t count     = 0;
+    char* tmp        = a_str;
+    char* last_comma = 0;
+    char delim[2];
+    delim[0] = a_delim;
+    delim[1] = 0;
+
+    /* Count how many elements will be extracted. */
+    while (*tmp)
+    {
+        if (a_delim == *tmp)
+        {
+            count++;
+            last_comma = tmp;
+        }
+        tmp++;
+    }
+
+    /* Add space for trailing token. */
+    count += last_comma < (a_str + strlen(a_str) - 1);
+
+    /* Add space for terminating null string so caller
+       knows where the list of returned strings ends. */
+    count++;
+
+    result =(char**) malloc(sizeof(char*) * count);
+
+    if (result)
+    {
+        size_t idx  = 0;
+        char* token = strtok(a_str, delim);
+
+        while (token)
+        {
+            *(result + idx++) = strdup(token);
+            token = strtok(0, delim);
+        }
+        *(result + idx) = 0;
+    }
+
+    return result;
+}
+
+char** loadFile(char* filename)
+{
+    int size= get_file_size(filename);
+    char ** text= NULL;
+    
+    FILE *file;
+    file= fopen(filename,"r");
+    
+    if (file != NULL){
+	text=(char**)malloc(sizeof(char*)*size);
+	char ligne[30];
+	int num_ligne;
+	for(num_ligne=0; fgets(ligne, 30, file) != NULL;
+	    ++num_ligne)
+	{
+	    text[num_ligne]=(char*)malloc(sizeof(char)*(strlen(ligne)+1));
+	    strcpy(text[num_ligne],ligne);
+	    #if DEBUG
+	    printf("DEBUG : num_ligne du fichier : %d/%d de valeur %s", num_ligne, size ,text[num_ligne]);
+	    #endif
+	}
+	#if DEBUG
+	printf("\nNUMERO DE LIGNE A LA SORTIE : %d\n", num_ligne);
+	#endif
+	fclose(file);
+    
+    } else {
+	// On affiche un message d'erreur si on veut
+	fprintf(stderr, "%s\n","Impossible d'ouvrir le fichier \n");
+    }
+
+    return text;
+}
+
 void loadInstance(char* filename, int *n, int *b, item **it)
 {
 
 /* TODO TO COMPLETE */
-
+    char** text= loadFile(filename);
+    
+    char **ligne1=str_split(text[0],' ');
+    int item_nb=atoi(ligne1[0]);
+    
+// 		init_size_vertices(&(graphe->vertices), nb_noeuds);
+    *it= (item*)malloc(item_nb*sizeof(item)); // TODO vérifier
+    
+    free(ligne1);
+    
+    int i;
+    for(i= 1; i < item_nb +1; i++)
+    {
+	char **ligne1=str_split(text[i],' ');
+	int coord_x=atoi(ligne1[0]); // TODO USE
+	int coord_y=atoi(ligne1[1]); // TODO USE
+	    
+// 	    add_vertice(&(graphe->vertices), coord_x,coord_y,i-1); TODO changer
+	    free(ligne1);
+    }
+    
+    // TODO faire suppression de text
+    // (on ne peut pas car on a pas size)
+    // -> utiliser variable globale ou changer loadFile
+//     for (i= 0; i < size; ++i){
+// 	free(text[i]);
+//     }
+    free(text);
+#if DEBUG
+    printf("Je sors de loadInstance\n");
+#endif
 }
 
 
@@ -32,38 +154,9 @@ static int comp_struct(const void* p1, const void* p2)
 {
 
 /* TODO TO COMPLETE */
-
+    return 0;
 } /* end of comp_struct */
 
-
-/*********************************************************/
-/*                   solveRelaxation                     */
-/*********************************************************/
-/*                                                       */
-/* The items in it[] are expected to be sorted by        */
-/* decreasing utility BEFORE calling solveRelaxation     */
-/* this function returns 'u' if problem is unfeasible    */
-/*                       'i' if solution is integer      */
-/*                       'f' if it is fractional         */
-/* In the last case only, frac_item contains the index   */
-/* of the item in the sorted list (not the id), that is  */
-/* partially selected.                                   */
-/* Input variables:                                      */
-/* n is the number of items                              */
-/* b is the knapsack capacity                            */
-/* it is an array of items                               */
-/* constraint is an array of n char, where constraint[j] */
-/* is '1' if item j (in the sorted list) has to be       */
-/* selected, '0' is not.                                 */
-/* Output variables:                                     */
-/* x is an array of n char, where x[j] is '1' if item j  */
-/* is selected, '0' otherwise                            */
-/* objx is a pointeur to a double containing the         */
-/* objective value of solution x.                        */
-/* frac_item is a pointeur to the item that is only      */
-/* partially inserted in the knapsack, *frac_item = -1   */
-/* if the solution is feasible (no fractional items)     */
-/*********************************************************/
 char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *objx, int *frac_item)
 {
 
