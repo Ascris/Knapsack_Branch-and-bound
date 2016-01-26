@@ -41,9 +41,12 @@ int main(int argc, char* argv[])
     item* i2 = (item*)malloc(sizeof(item));
     i1->a = 1; i1->c = 2; i1->id = 1;
     i2->a = 2; i2->c = 6; i2->id = 2;
-    int testComp = comp_struct(i1, i2);
-    printf("testComp = %d", testComp);
     
+    void* item1 = (item *)i1;
+    void* item2 = (item *)i2;
+    
+    int testComp = comp_struct(item1, item2);
+    printf("testComp = %d", testComp);
     */
     
     BB(n, b, it, &bestobj);
