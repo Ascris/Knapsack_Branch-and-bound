@@ -31,7 +31,7 @@ struct s_queue{
 };
 typedef struct s_queue * QUEUE;
 
-char verbose = 'n'; /* 'v' for verbose */
+char verbose; /* 'v' for verbose */
 
 /*********************************************************/
 /*                     integerProfit                     */
@@ -654,43 +654,3 @@ void BB(int n, int b, item *it, double *bestobj)
     free(x);
 }
 
-/*********************************************************/
-/*                       main                            */
-/*********************************************************/
-int main(int argc, char* argv[])
-{
-    int n, b;
-    item *it = NULL;
-    double bestobj = 0; /* objective value */
-    struct timeb t0, t1;    /* Timers */
-    double cpu_time;        /* Time */
-
-
-    ftime(&t0);
-    if(argc != 2)
-    {
-	printf("\nCall the program with an argument, that is the instance file name.\n");
-	exit(EXIT_FAILURE);
-    }
-
-    loadInstance(argv[1], &n, &b, &it);
-    if(verbose == 'v')
-	displayData(n, b, it);
-
-    BB(n, b, it, &bestobj);
-
-    printf("\nOptimal objective value is %lf",bestobj);
-    if(verbose == 'v')
-	displayOptimalSolution(n, it);
-
-    /* Below, for checking that the items have been reordered by decreasing utility. */
-    //displayData(n, b, it);
-
-    ftime(&t1);
-    cpu_time = (double)(t1.time - t0.time) + (double)(t1.millitm-t0.millitm)/1000.0;
-    printf("\nCPU time : %f seconds.", cpu_time);
-
-    free(it);
-    printf("\n");
-    return EXIT_SUCCESS;
-}
