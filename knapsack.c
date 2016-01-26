@@ -1,12 +1,10 @@
+#include "knapsack.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <sys/timeb.h>
 #include <string.h>
-
-#include "./structures/item.h"
-#include "./structures/queue.h"
-#include "./structures/tree.h"
 
 char verbose; /* 'v' for verbose */
 
