@@ -2,6 +2,6 @@
 #include <stdlib.h>
 
 int main(int argc, char **argv) {
-    printf("Hello World!");
+    printf("Debut programme ! GitHub linked ! ");
     return 0;
 }
