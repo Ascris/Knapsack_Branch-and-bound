@@ -341,7 +341,7 @@ void displayData(int n, int b, item *it)
 void loadInstance(char* filename, int *n, int *b, item **it)
 {
 
-/* TO COMPLETE */
+/* TODO TO COMPLETE */
 
 }
 
@@ -352,7 +352,7 @@ void loadInstance(char* filename, int *n, int *b, item **it)
 static int comp_struct(const void* p1, const void* p2)
 {
 
-/* TO COMPLETE */
+/* TODO TO COMPLETE */
 
 } /* end of comp_struct */
 
@@ -412,7 +412,7 @@ void displaySol(int n, int b, item *it, char *x, double objx)
 char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *objx, int *frac_item)
 {
 
-    /* TO COMPLETE */
+    /* TODO TO COMPLETE */
 
     return '\0';
 
@@ -611,7 +611,7 @@ void BB(int n, int b, item *it, double *bestobj)
 
     /* Sorting the items by decreasing utility */
     
-    /*** TO COMPLETE ***/
+    /*** TODO TO COMPLETE ***/
 
     /* Branch-and-Bound starts here */
 
