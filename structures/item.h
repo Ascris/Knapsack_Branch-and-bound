@@ -11,9 +11,24 @@ typedef struct s_item item;
 
 char verbose; /* 'v' for verbose */
 
+/*********************************************************/
+/*                     integerProfit                     */
+/*********************************************************/
 char integerProfit(int n, item * it);
+
+/*********************************************************/
+/*                displayOptimalSolution                 */
+/*********************************************************/
 void displayOptimalSolution(int n, item * it);
+
+/*********************************************************/
+/*                      displayData                      */
+/*********************************************************/
 void displayData(int n, int b, item *it);
+
+/*********************************************************/
+/*                     displaySol                        */
+/*********************************************************/
 void displaySol(int n, int b, item *it, char *x, double objx);
 
 //comparison of two items by the ratio : a/c

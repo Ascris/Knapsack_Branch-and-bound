@@ -1,27 +1,263 @@
+#include "knapsack.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <sys/timeb.h>
-
-#include "./structures/item.h"
-#include "./structures/queue.h"
-#include "./structures/tree.h"
+#include <string.h>
 
 char verbose; /* 'v' for verbose */
 
-/*********************************************************/
-/*                     loadInstance                      */
-/*********************************************************/
-/* This function opens file *filename, reads *n, the     */
-/* number of items, *b the knapsack capacity, and        */
-/* allocates memory for *it, an array of *n item data    */
-/* structures.                                           */
-/*********************************************************/
+void createNode(int n, int b, item *it, char intdata, char *x, char *constraint, TREE *newnode, TREE pred, int var_id, char sign, int rhs, double *bestobj, QUEUE *queue, unsigned int *nbnode)
+{
+    int frac_item; /* index (not the id) in array it[] of the item j */
+    char status;   /* solveRelaxation status: 'i', 'u', or 'f'       */
+    double objx;   /* solution value associated with solution x      */
+    int j;
+
+    *newnode = (TREE)calloc(1, sizeof(struct s_node));
+    if(*newnode == NULL)
+    {
+    printf("\nMemory allocation problem, failing to create a tree newnode.\nExiting...\n");
+    exit(EXIT_FAILURE);
+    }
+    (*newnode)->pred = pred;
+    (*newnode)->var_id = var_id;
+    (*newnode)->sign = sign;
+    (*newnode)->rhs = rhs;
+    (*newnode)->var_frac = -1; /* fracional variable unidentified yet */
+    (*newnode)->status = 'n';
+
+    /* Solving the node, for the purpose of determining its objective value: */
+    /* (*newnode)->obj */
+
+    generateConstraint(n, *newnode, constraint);
+
+    status = solveRelaxation(n, b, it, constraint, x, &objx, &frac_item);
+    if(verbose == 'v')
+    {
+	switch(status)
+	{
+	    case 'i': printf("\nsolveRelaxation solution is feasible (integer), with objx = %lf", objx);
+	    break;
+	    case 'u': printf("\nsolveRelaxation is unfeasible");
+	    break;
+	    case 'f': printf("\nsolveRelaxation solution is fractional with objx = %lf.\nItem %d having id %d, size %d and cost %d is used PARTIALLY in the solution, so branching is required.", objx, frac_item, it[frac_item].id, it[frac_item].a, it[frac_item].c);
+	    break;
+	    default: printf("\n\nUNEXPECTED CHAR VALUE RETURNED BY solveRelaxation: \"%c\"\n\n",status);
+	}
+    }
+    (*newnode)->status = status;
+    (*newnode)->obj = objx;
+
+    //displaySol(n, b, it, x, objx);
+    //char integerProfit(int n, item * it)
+
+
+    /* A new node is created only if its status is 'f' and its objective is stricly larger than *bestobj */
+    if(status == 'f' && *bestobj < (intdata == '1'?floor(objx):objx))
+    {
+	(*nbnode)++;
+	(*newnode)->var_frac = frac_item;
+	/* Updating the parent node too */
+	if((*newnode)->pred != NULL)
+	    {
+	    if((*newnode)->rhs == 0)
+		(*newnode)->pred->suc0 = (*newnode);
+	    else if((*newnode)->rhs == 1)
+		(*newnode)->pred->suc1 = (*newnode);
+	    else
+		{
+		printf("\nError in createNode(): cannot update the parent node because the passed rhs = %d whereas it should be 0 or 1.\n", rhs);
+		}
+	    }
+	if(verbose == 'v')
+	    displayNode(*newnode);
+	/* Insert the current node in the queue, at the correct location */
+	addToQueue(queue, *newnode);
+	//printf("\nSize of queue = %d elements", sizeQueue(*queue));
+    }
+    else
+    {
+	if(verbose == 'v')
+	    printf("\nNo node creation (status is '%c')", (*newnode)->status);
+	if(status == 'f')
+	    {
+	    if(verbose == 'v')
+		printf("\nDespite its status 'f', this node is pruned because its objective value is %lf, whereas the objective value of the best feasible solution found so far is %lf.", objx, *bestobj);
+	    }
+	else if(status == 'u')
+	    {
+	    /* Delete node, update its parent too. */
+	    if(pred == NULL)
+		{
+		/* The root node is unfeasible */
+		printf("\nThis knapsack problem instance is unfeasible.");
+		}
+	    }
+	else if(status == 'i')
+	    {
+	    /* Compare objx to the best available integer solution,      */
+	    /* and update it if necessary. The best solution is directly */
+	    /* coded in the item structure, see char bestsol.            */
+	    /* Delete node, update its parent too.                       */
+	    if(objx > *bestobj)
+		{
+		*bestobj = objx;
+		for(j = 0; j < n; j++)
+		    it[j].bestsol = x[j];
+		}
+	    }
+	
+	/* Updating the parent node pred, if it exists */
+	if(pred != NULL)
+	{
+	    if(rhs == 0)
+		pred->suc0 = NULL;
+	    else if(rhs == 1)
+		pred->suc1 = NULL;
+	    else
+		printf("\nError with rhs, that is %d while it should be either 0 or 1.\n", rhs);
+	}
+	/* Current node deletion */
+	free(*newnode);
+   }
+}
+
+int get_file_size(char *filename)
+{
+   FILE *fp;
+   int file_size;
+   file_size = 0;
+   if ((fp = fopen(filename, "rb" )) == NULL) {
+      fprintf(stderr, "Cannot open %s.\n", filename);
+      return(file_size);
+   }
+   char ligne[30];
+   while(fgets(ligne, 30,fp) != NULL)
+    {
+	    file_size++;
+    }
+   fclose(fp);
+   return(file_size);
+}
+
+
+char** str_split(char* a_str, const char a_delim)
+{
+    char** result    = 0;
+    size_t count     = 0;
+    char* tmp        = a_str;
+    char* last_comma = 0;
+    char delim[2];
+    delim[0] = a_delim;
+    delim[1] = 0;
+
+    /* Count how many elements will be extracted. */
+    while (*tmp)
+    {
+        if (a_delim == *tmp)
+        {
+            count++;
+            last_comma = tmp;
+        }
+        tmp++;
+    }
+
+    /* Add space for trailing token. */
+    count += last_comma < (a_str + strlen(a_str) - 1);
+
+    /* Add space for terminating null string so caller
+       knows where the list of returned strings ends. */
+    count++;
+
+    result =(char**) malloc(sizeof(char*) * count);
+
+    if (result)
+    {
+        size_t idx  = 0;
+        char* token = strtok(a_str, delim);
+
+        while (token)
+        {
+            *(result + idx++) = strdup(token);
+            token = strtok(0, delim);
+        }
+        *(result + idx) = 0;
+    }
+
+    return result;
+}
+
+char** loadFile(char* filename)
+{
+    int size= get_file_size(filename);
+    char ** text= NULL;
+    
+    FILE *file;
+    file= fopen(filename,"r");
+    
+    if (file != NULL){
+	text=(char**)malloc(sizeof(char*)*size);
+	char ligne[30];
+	int num_ligne;
+	for(num_ligne=0; fgets(ligne, 30, file) != NULL;
+	    ++num_ligne)
+	{
+	    text[num_ligne]=(char*)malloc(sizeof(char)*(strlen(ligne)+1));
+	    strcpy(text[num_ligne],ligne);
+	    #if DEBUG
+	    printf("DEBUG : num_ligne du fichier : %d/%d de valeur %s", num_ligne, size ,text[num_ligne]);
+	    #endif
+	}
+	#if DEBUG
+	printf("\nNUMERO DE LIGNE A LA SORTIE : %d\n", num_ligne);
+	#endif
+	fclose(file);
+    
+    } else {
+	// On affiche un message d'erreur si on veut
+	fprintf(stderr, "%s\n","Impossible d'ouvrir le fichier \n");
+    }
+
+    return text;
+}
+
 void loadInstance(char* filename, int *n, int *b, item **it)
 {
 
 /* TODO TO COMPLETE */
-
+    char** text= loadFile(filename);
+    
+    char **ligne1=str_split(text[0],' ');
+    int item_nb=atoi(ligne1[0]);
+    
+// 		init_size_vertices(&(graphe->vertices), nb_noeuds);
+    *it= (item*)malloc(item_nb*sizeof(item)); // TODO vérifier
+    
+    free(ligne1);
+    
+    int i;
+    for(i= 1; i < item_nb +1; i++)
+    {
+	char **ligne1=str_split(text[i],' ');
+	int coord_x=atoi(ligne1[0]); // TODO USE
+	int coord_y=atoi(ligne1[1]); // TODO USE
+	    
+// 	    add_vertice(&(graphe->vertices), coord_x,coord_y,i-1); TODO changer
+	    free(ligne1);
+    }
+    
+    // TODO faire suppression de text
+    // (on ne peut pas car on a pas size)
+    // -> utiliser variable globale ou changer loadFile
+//     for (i= 0; i < size; ++i){
+// 	free(text[i]);
+//     }
+    free(text);
+#if DEBUG
+    printf("Je sors de loadInstance\n");
+#endif
 }
 
 
@@ -32,38 +268,9 @@ static int comp_struct(const void* p1, const void* p2)
 {
 
 /* TODO TO COMPLETE */
-
+    return 0;
 } /* end of comp_struct */
 
-
-/*********************************************************/
-/*                   solveRelaxation                     */
-/*********************************************************/
-/*                                                       */
-/* The items in it[] are expected to be sorted by        */
-/* decreasing utility BEFORE calling solveRelaxation     */
-/* this function returns 'u' if problem is unfeasible    */
-/*                       'i' if solution is integer      */
-/*                       'f' if it is fractional         */
-/* In the last case only, frac_item contains the index   */
-/* of the item in the sorted list (not the id), that is  */
-/* partially selected.                                   */
-/* Input variables:                                      */
-/* n is the number of items                              */
-/* b is the knapsack capacity                            */
-/* it is an array of items                               */
-/* constraint is an array of n char, where constraint[j] */
-/* is '1' if item j (in the sorted list) has to be       */
-/* selected, '0' is not.                                 */
-/* Output variables:                                     */
-/* x is an array of n char, where x[j] is '1' if item j  */
-/* is selected, '0' otherwise                            */
-/* objx is a pointeur to a double containing the         */
-/* objective value of solution x.                        */
-/* frac_item is a pointeur to the item that is only      */
-/* partially inserted in the knapsack, *frac_item = -1   */
-/* if the solution is feasible (no fractional items)     */
-/*********************************************************/
 char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *objx, int *frac_item)
 {
 

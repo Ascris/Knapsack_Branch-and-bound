@@ -1,8 +1,8 @@
 #include "item.h"
 
-/*********************************************************/
-/*                     integerProfit                     */
-/*********************************************************/
+#include <math.h>
+#include <stdio.h>
+
 char integerProfit(int n, item * it)
 {
     int j = 0;
@@ -15,9 +15,6 @@ char integerProfit(int n, item * it)
     return '1';
 }
 
-/*********************************************************/
-/*                displayOptimalSolution                 */
-/*********************************************************/
 void displayOptimalSolution(int n, item * it)
 {
     int j;
@@ -31,10 +28,6 @@ void displayOptimalSolution(int n, item * it)
 
 }
 
-
-/*********************************************************/
-/*                      displayData                      */
-/*********************************************************/
 void displayData(int n, int b, item *it)
 {
     int j;
@@ -44,10 +37,6 @@ void displayData(int n, int b, item *it)
 	printf("\nItem %d has id %u, its size is %d and its profit is %d", j, it[j].id, it[j].a, it[j].c);
 }
 
-
-/*********************************************************/
-/*                     displaySol                        */
-/*********************************************************/
 void displaySol(int n, int b, item *it, char *x, double objx)
 {
     int j, load = 0;;

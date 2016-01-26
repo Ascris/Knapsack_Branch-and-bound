@@ -1,17 +1,8 @@
 #include "tree.h"
 
 #include <stdlib.h>
+#include <stdio.h>
 
-
-/*********************************************************/
-/*                    deleteNodeTree                     */
-/*********************************************************/
-/* Deletes node at address *tree as well as all the      */
-/* successors of that node in the arborescence.          */
-/* Also updates suc0 or suc1 in its parent node by       */
-/* setting it to NULL. Finally, memory is freed and      */
-/* *tree is set to NULL                                  */
-/*********************************************************/
 void deleteNodeTree(TREE *tree)
 {
     if(*tree == NULL) return ;
@@ -36,9 +27,6 @@ void deleteNodeTree(TREE *tree)
 }
 
 
-/*********************************************************/
-/*                      displayNode                      */
-/*********************************************************/
 void displayNode(TREE t)
 {
 printf("\nThis is displayNode, called for a node which address is %p.", t);
@@ -52,10 +40,6 @@ printf("\nThis is displayNode, called for a node which address is %p.", t);
    }
 }
 
-
-/*********************************************************/
-/*                      displayTree                      */
-/*********************************************************/
 void displayTree(TREE t)
 {
     //printf("\nThis is displayTree, called for a 'root' node which address is %p.", t);
@@ -69,14 +53,6 @@ void displayTree(TREE t)
    }
 }
 
-
-/*********************************************************/
-/*                  generateConstraint                   */
-/*********************************************************/
-/* returns an already dimensioned array constraints      */
-/* by backtraking up to the root node                    */
-/* p is a pointer to the current node                    */
-/*********************************************************/
 void generateConstraint(int n, TREE p, char *constraint)
 {
     int j;
@@ -109,5 +85,3 @@ void generateConstraint(int n, TREE p, char *constraint)
 	printf("%c",constraint[j]);
    }
 }
-
-
