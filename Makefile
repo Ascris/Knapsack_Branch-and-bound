@@ -1,9 +1,11 @@
 CC=gcc
 CFLAGS="-Wall"
+CENDFLAGS="-lm"
 OBJDIR=./obj/
+STRUCTDIR=structures/
 
 debug:clean
-	$(CC) $(CFLAGS) -g -o knapsack_branch-and-bound knapsack.c main.c
+	$(CC) $(CFLAGS) -g -o knapsack_branch-and-bound knapsack.c $(STRUCTDIR)item.c $(STRUCTDIR)queue.c $(STRUCTDIR)tree.c main.c $(CENDFLAGS)
 stable:clean
 	$(CC) $(CFLAGS) -o knapsack_branch-and-bound knapsack.c
 clean:

@@ -6,7 +6,8 @@
 #include<math.h>
 #include <sys/timeb.h>
 
-// #include "structures/item.h"
+#include "./structures/item.h"
+// #include "./knapsack.c"
 
 
 // DEFINITION DE LA VARIABLE GLOBALE verbose
