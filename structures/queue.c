@@ -4,13 +4,6 @@
 #include <stdio.h>
 #include <math.h>
 
-/*********************************************************/
-/*                    deleteNodeQueue                    */
-/*********************************************************/
-/* Deletes node at address q in a queue starting at      */
-/* address *queue. This address can be modified if       */
-/* q == *queue (so queue is passed by address)           */
-/*********************************************************/
 void deleteNodeQueue(QUEUE *queue, QUEUE q)
 {
     if(q == NULL || *queue == NULL) return;
@@ -45,9 +38,6 @@ void deleteNodeQueue(QUEUE *queue, QUEUE q)
     free(q);
 }
 
-/*********************************************************/
-/*                     displayQueue                      */
-/*********************************************************/
 void displayQueue(QUEUE q)
 {
     printf("\nThis is displayQueue");
@@ -59,11 +49,6 @@ void displayQueue(QUEUE q)
     printf("\n**** end of displayQueue ****");
 }
 
-/*********************************************************/
-/*                      sizeQueue                        */
-/*********************************************************/
-/* returns the number of open problems in the queue      */
-/*********************************************************/
 int sizeQueue(QUEUE q)
 {
     int size_queue = 0;
@@ -75,10 +60,6 @@ int sizeQueue(QUEUE q)
     return size_queue;
 }
 
-
-/*********************************************************/
-/*                      addToQueue                       */
-/*********************************************************/
 void addToQueue(QUEUE *queue, TREE t)
 {
     QUEUE q, tmp, pred;
@@ -140,16 +121,6 @@ void addToQueue(QUEUE *queue, TREE t)
 
 }
 
-
-/*********************************************************/
-/*                         prune                         */
-/*********************************************************/
-/* This function deletes the nodes (in *q as well as in  */
-/* tree) whose objective value is less than or equal to  */
-/* *bestobj                                              */
-/* intdata is 1 if all the costs are integer (allows to  */
-/* prune at ceil(*bestobj)                               */
-/*********************************************************/
 void prune(QUEUE *q, double * bestobj, char intdata)
 {
     QUEUE tmp, qlast = *q;
@@ -183,126 +154,6 @@ void prune(QUEUE *q, double * bestobj, char intdata)
 	printf("\nEnd of prune(), dispaying queue.");
 	displayQueue(*q);
     }
-}
-
-
-/*********************************************************/
-/*                    createNode                         */
-/*********************************************************/
-void createNode(int n, int b, item *it, char intdata, char *x, char *constraint, TREE *newnode, TREE pred, int var_id, char sign, int rhs, double *bestobj, QUEUE *queue, unsigned int *nbnode)
-{
-    int frac_item; /* index (not the id) in array it[] of the item j */
-    char status;   /* solveRelaxation status: 'i', 'u', or 'f'       */
-    double objx;   /* solution value associated with solution x      */
-    int j;
-
-    *newnode = (TREE)calloc(1, sizeof(struct s_node));
-    if(*newnode == NULL)
-    {
-    printf("\nMemory allocation problem, failing to create a tree newnode.\nExiting...\n");
-    exit(EXIT_FAILURE);
-    }
-    (*newnode)->pred = pred;
-    (*newnode)->var_id = var_id;
-    (*newnode)->sign = sign;
-    (*newnode)->rhs = rhs;
-    (*newnode)->var_frac = -1; /* fracional variable unidentified yet */
-    (*newnode)->status = 'n';
-
-    /* Solving the node, for the purpose of determining its objective value: */
-    /* (*newnode)->obj */
-
-    generateConstraint(n, *newnode, constraint);
-
-    status = solveRelaxation(n, b, it, constraint, x, &objx, &frac_item);
-    if(verbose == 'v')
-    {
-	switch(status)
-	{
-	    case 'i': printf("\nsolveRelaxation solution is feasible (integer), with objx = %lf", objx);
-	    break;
-	    case 'u': printf("\nsolveRelaxation is unfeasible");
-	    break;
-	    case 'f': printf("\nsolveRelaxation solution is fractional with objx = %lf.\nItem %d having id %d, size %d and cost %d is used PARTIALLY in the solution, so branching is required.", objx, frac_item, it[frac_item].id, it[frac_item].a, it[frac_item].c);
-	    break;
-	    default: printf("\n\nUNEXPECTED CHAR VALUE RETURNED BY solveRelaxation: \"%c\"\n\n",status);
-	}
-    }
-    (*newnode)->status = status;
-    (*newnode)->obj = objx;
-
-    //displaySol(n, b, it, x, objx);
-    //char integerProfit(int n, item * it)
-
-
-    /* A new node is created only if its status is 'f' and its objective is stricly larger than *bestobj */
-    if(status == 'f' && *bestobj < (intdata == '1'?floor(objx):objx))
-    {
-	(*nbnode)++;
-	(*newnode)->var_frac = frac_item;
-	/* Updating the parent node too */
-	if((*newnode)->pred != NULL)
-	    {
-	    if((*newnode)->rhs == 0)
-		(*newnode)->pred->suc0 = (*newnode);
-	    else if((*newnode)->rhs == 1)
-		(*newnode)->pred->suc1 = (*newnode);
-	    else
-		{
-		printf("\nError in createNode(): cannot update the parent node because the passed rhs = %d whereas it should be 0 or 1.\n", rhs);
-		}
-	    }
-	if(verbose == 'v')
-	    displayNode(*newnode);
-	/* Insert the current node in the queue, at the correct location */
-	addToQueue(queue, *newnode);
-	//printf("\nSize of queue = %d elements", sizeQueue(*queue));
-    }
-    else
-    {
-	if(verbose == 'v')
-	    printf("\nNo node creation (status is '%c')", (*newnode)->status);
-	if(status == 'f')
-	    {
-	    if(verbose == 'v')
-		printf("\nDespite its status 'f', this node is pruned because its objective value is %lf, whereas the objective value of the best feasible solution found so far is %lf.", objx, *bestobj);
-	    }
-	else if(status == 'u')
-	    {
-	    /* Delete node, update its parent too. */
-	    if(pred == NULL)
-		{
-		/* The root node is unfeasible */
-		printf("\nThis knapsack problem instance is unfeasible.");
-		}
-	    }
-	else if(status == 'i')
-	    {
-	    /* Compare objx to the best available integer solution,      */
-	    /* and update it if necessary. The best solution is directly */
-	    /* coded in the item structure, see char bestsol.            */
-	    /* Delete node, update its parent too.                       */
-	    if(objx > *bestobj)
-		{
-		*bestobj = objx;
-		for(j = 0; j < n; j++)
-		    it[j].bestsol = x[j];
-		}
-	    }
-	
-	/* Updating the parent node pred, if it exists */
-	if(pred != NULL)
-	{
-	    if(rhs == 0)
-		pred->suc0 = NULL;
-	    else if(rhs == 1)
-		pred->suc1 = NULL;
-	    else
-		printf("\nError with rhs, that is %d while it should be either 0 or 1.\n", rhs);
-	}
-	/* Current node deletion */
-	free(*newnode);
-   }
 }
 
 
