@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
     ftime(&t0);
     if(argc != 2)
     {
-	printf("\nCall the program with an argument, that is the instance file name.\n");
+	printf("\nPlease, call the program with an argument, that is the instance file name.\n");
 	exit(EXIT_FAILURE);
     }
 

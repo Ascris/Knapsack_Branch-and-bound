@@ -31,5 +31,9 @@
 # Debug files
 *.dSYM/
 
-#Fichier KDev4
+######	Our modification ######
+# KDev4 files
 *.kdev4
+
+# Data files
+./txtfile/*
