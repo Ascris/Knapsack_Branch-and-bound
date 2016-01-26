@@ -266,9 +266,14 @@ void loadInstance(char* filename, int *n, int *b, item **it)
 /*********************************************************/
 static int comp_struct(const void* p1, const void* p2)
 {
+/* TODO a verifier a l'execution */
+item i1 = *( (item*) p1);
+item i2 = *( (item*) p2);
 
-/* TODO TO COMPLETE */
-    return 0;
+int isGreaterThan= compItem(i1, i2);
+printf("L'item %d est plus grand que l'item %d", i1.id, i2.id);
+
+return isGreaterThan;
 } /* end of comp_struct */
 
 char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *objx, int *frac_item)

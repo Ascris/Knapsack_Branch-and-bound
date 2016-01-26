@@ -58,3 +58,8 @@ void displaySol(int n, int b, item *it, char *x, double objx)
 
 }
 
+int compItem(item i1, item i2)
+{
+    return ( (i1.c/i1.a)  > (i2.c/i2.a) );
+}
+

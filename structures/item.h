@@ -32,7 +32,7 @@ void displayData(int n, int b, item *it);
 void displaySol(int n, int b, item *it, char *x, double objx);
 
 //comparison of two items by the ratio : a/c
-int compItem(item i1, item i2) { return ( (i1.c/i1.a)  > (i2.c/i2.a) ); }
+int compItem(item i1, item i2);
 
 
 #endif
