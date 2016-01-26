@@ -1,4 +1,4 @@
-#include "../include/vertice.h"
+#include "vertice.h"
 
 // VERTICE
 void display_vertice(vertice v)
