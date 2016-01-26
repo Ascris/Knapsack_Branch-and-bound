@@ -33,6 +33,19 @@ int main(int argc, char* argv[])
     if(verbose == 'v')
 	displayData(n, b, it);
 
+    /*
+     * Test de la fonction comp_struct
+     */
+    /*
+    item* i1 = (item*)malloc(sizeof(item));
+    item* i2 = (item*)malloc(sizeof(item));
+    i1->a = 1; i1->c = 2; i1->id = 1;
+    i2->a = 2; i2->c = 6; i2->id = 2;
+    int testComp = comp_struct(i1, i2);
+    printf("testComp = %d", testComp);
+    
+    */
+    
     BB(n, b, it, &bestobj);
 
     printf("\nOptimal objective value is %lf",bestobj);
