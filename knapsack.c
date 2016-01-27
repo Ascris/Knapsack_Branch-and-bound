@@ -270,16 +270,13 @@ void loadInstance(char* filename, int *n, int *b, item **it)
 	char line[31];
 	
 	// File record and instanciation of items 
-	int i;
-	for(i= 1; i <= *n; i++)
-	{
-	    if (!read_first_line(file, n, b)){
-		fprintf(stderr, "First line reading impossible");
-		// exit for, verification needed at end of for to ensure
-		// there was not any problem during reading
-		break;
-	    }
-	    
+	if (!read_first_line(file, n, b)){
+	    fprintf(stderr, "First line reading impossible");
+	    // exit for, verification needed at end of for to ensure
+	    // there was not any problem during reading
+	}
+	else {
+	    int i;
 	    items= init_items(file, *n);
 	}
     }
