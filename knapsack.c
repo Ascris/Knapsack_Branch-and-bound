@@ -276,13 +276,81 @@ printf("L'item %d est plus grand que l'item %d", i1.id, i2.id);
 return isGreaterThan;
 } /* end of comp_struct */
 
+/*********************************************************/
+/*                   solveRelaxation                     */
+/*********************************************************/
+/*                                                       */
+/* The items in it[] are expected to be sorted by        */
+/* decreasing utility BEFORE calling solveRelaxation     */
+/* this function returns 'u' if problem is unfeasible    */
+/*                       'i' if solution is integer      */
+/*                       'f' if it is fractional         */
+/* In the last case only, frac_item contains the index   */
+/* of the item in the sorted list (not the id), that is  */
+/* partially selected.                                   */
+/* Input variables:                                      */
+/* n is the number of items                              */
+/* b is the knapsack capacity                            */
+/* it is an array of items                               */
+/* constraint is an array of n char, where constraint[j] */
+/* is '1' if item j (in the sorted list) has to be       */
+/* selected, '0' is not.                                 */
+/* Output variables:                                     */
+/* x is an array of n char, where x[j] is '1' if item j  */
+/* is selected, '0' otherwise                            */
+/* objx is a pointeur to a double containing the         */
+/* objective value of solution x.                        */
+/* frac_item is a pointeur to the item that is only      */
+/* partially inserted in the knapsack, *frac_item = -1   */
+/* if the solution is feasible (no fractional items)     */
+/*********************************************************/
 char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *objx, int *frac_item)
 {
-
     /* TODO TO COMPLETE */
-
+    
+    //on prend en compte constraint avant de commencer
+    constraint = x;
+    
+    //si tous les items qui sont dans constraint dépassent la taille du sac, le problem est infaisable
+    int nbConstraints, totalPoidsItems = 0;
+    for(nbConstraints= 0; nbConstraints < n; ++nbConstraints){
+	if(constraint[nbConstraints] == '1'){
+	    totalPoidsItems+= it[nbConstraints].a;
+	    if(totalPoidsItems < b) return 'u';
+	}
+    }
+    //si on arrive ici, il reste encore de la place dans le sac
+    
+    
+    int remplissageSac = 0;
+    while(remplissageSac < b)
+    {
+	int indiceIt;
+	for(indiceIt= 0; indiceIt < n; ++indiceIt){
+	    if(it[indiceIt].c < (b-remplissageSac)){
+		//l'item peut etre ajoute au Sac
+		remplissageSac+= it[indiceIt].a;
+		//l'item ajoute au Sac DEVIENDRA une condition a verifier
+		x[indiceIt] = '1';
+	    } else{
+		//on doit fractionner l'item car il n'y a pas la place pour l'inserer en entier
+		x[indiceIt] = '0';
+		(*frac_item) = indiceIt;
+	    }
+	}
+    }//le sac est plein
+    //calcul de la valeur de l'objectif actuel TODO fonction à faire pour calculer ceci
+    double valObjectif= 0.0;
+    int itemPresent;
+    for(itemPresent= 0; itemPresent < n; ++itemPresent){
+	if(x[itemPresent] == '1'){
+	    //item present = ajout au total de l'objectif
+	    valObjectif+= it[itemPresent].c;
+	}
+    }
+    (*objx) = valObjectif;
+	
     return '\0';
-
 }
 
 /*********************************************************/
