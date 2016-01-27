@@ -2,7 +2,7 @@
 #define OTHERS_H
 
 #include <stdio.h>
-#define DEBUG 1
+// #define DEBUG 1
 
 /*
 

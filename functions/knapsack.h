@@ -7,6 +7,8 @@
 #include "../structures/queue.h"
 #include "../structures/tree.h"
 
+typedef char boolean;
+
 typedef item* tab_items;
 
 char verbose; /* 'v' for verbose */
@@ -16,7 +18,7 @@ void createNode(int n, int b, item *it, char intdata, char *x, char *constraint,
 
 /**
  */
-char read_first_line(FILE* file, int* items_nb, int* capacity_nb);
+boolean read_first_line(FILE* file, int* items_nb, int* capacity_nb);
 
 /**
  */

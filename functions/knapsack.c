@@ -126,7 +126,7 @@ void createNode(int n, int b, item *it, char intdata, char *x, char *constraint,
    }
 }
 
-char read_first_line(FILE* file, int* items_nb, int* capacity)
+boolean read_first_line(FILE* file, int* items_nb, int* capacity)
 {
     char line[31];
     
@@ -164,6 +164,13 @@ char read_first_line(FILE* file, int* items_nb, int* capacity)
     } else { return 0;}
 }
 
+void printdebug( const char * format, ... ){   
+#if DEBUG
+    va_list ap;
+    printf(format, ap);
+#endif
+}
+
 tab_items init_items(FILE* file, int items_nb)
 {
     char line[31];
@@ -182,7 +189,7 @@ tab_items init_items(FILE* file, int items_nb)
 	    // Value reading
 	    char* values= strtok(line, " ");
 	    if (values != NULL){
-		printf ("item id : %s\n", values);	    
+		printdebug ("item id : %s\n", values);	    
 		items[i].id=	atoi(values);
 		// next value
 		values = strtok (NULL, " ");
@@ -192,7 +199,7 @@ tab_items init_items(FILE* file, int items_nb)
 	    }
 	    
 	    if (values != NULL){
-		printf ("size : %s\n", values);
+		printdebug("size : %s\n", values);
 		items[i].a=   atoi(values);
 		// next value
 		values = strtok (NULL, " ");
@@ -202,7 +209,7 @@ tab_items init_items(FILE* file, int items_nb)
 	    }
 	    
 	    if (values != NULL){
-		printf ("cost : %s\n", values);
+		printdebug("cost : %s\n", values);
 		items[i].c=   atoi(values);
 		// useless to get next value
 	    } else {
@@ -210,7 +217,7 @@ tab_items init_items(FILE* file, int items_nb)
 		return 0;
 	    }
 	    
-// 	    printdebug("DEBUG : Item [%d] created : size %d, cost %d\n", items[i].id, items[i].a, items[i].c);
+	    printdebug("DEBUG : Item [%d] created : size %d, cost %d\n", items[i].id, items[i].a, items[i].c);
 	    
 	}
 	return items;
@@ -223,7 +230,8 @@ tab_items init_items(FILE* file, int items_nb)
 
 void loadInstance(char* filename, int *n, int *b, item **it)
 {
-/* TODO TO COMPLETE */
+/* TO COMPLETE */
+/* DONE */
 
 // Reading
     FILE *file;
@@ -250,14 +258,14 @@ void loadInstance(char* filename, int *n, int *b, item **it)
 
 int comp_struct(const void* p1, const void* p2)
 {
-/* TODO a verifier a l'execution */
-item i1 = *( (item*) p1);
-item i2 = *( (item*) p2);
-float isGreaterThan = ( ((float)i1.c/(float)i1.a)  < ((float)i2.c/(float)i2.a) );
+    /* TODO a verifier a l'execution */
+    item i1 = *( (item*) p1);
+    item i2 = *( (item*) p2);
+    boolean isGreaterThan = ( ((float)i1.c/(float)i1.a)  < ((float)i2.c/(float)i2.a) );
 
-// printf("\nL'item %d est plus grand que l'item %d", i1.id, i2.id);
+    printdebug("\nL'item %d est plus grand que l'item %d", i1.id, i2.id);
 
-return isGreaterThan;
+    return isGreaterThan;
 } /* end of comp_struct */
 
 char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *objx, int *frac_item)
@@ -275,17 +283,17 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 	    if(totalPoidsItems < b) return 'u';
 	}
     }
-    //si on arrive ici, il reste encore de la place dans le sac
+    //if the execution is at this point, there is some space left in the bag
     
     
-    int remplissageSac = 0;
-    while(remplissageSac < b)
+    int fill_bag = 0;
+    while(fill_bag < b)
     {
 	int indiceIt;
 	for(indiceIt= 0; indiceIt < n; ++indiceIt){
-	    if(it[indiceIt].c < (b-remplissageSac)){
+	    if(it[indiceIt].c < (b-fill_bag)){
 		//l'item peut etre ajoute au Sac
-		remplissageSac+= it[indiceIt].a;
+		fill_bag+= it[indiceIt].a;
 		//l'item ajoute au Sac DEVIENDRA une condition a verifier
 		x[indiceIt] = '1';
 	    } else{
@@ -294,7 +302,7 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 		(*frac_item) = indiceIt;
 	    }
 	}
-    }//le sac est plein
+    }// the bag is full
     //calcul de la valeur de l'objectif actuel TODO fonction à faire pour calculer ceci
     double valObjectif= 0.0;
     int itemPresent;
@@ -335,11 +343,12 @@ void BB(int n, int b, item *it, double *bestobj)
 
     /* Sorting the items by decreasing utility */
 
+    /** TO COMPLETE **/
     /** TODO Deja fini ? **/
     qsort(it, n, sizeof(item), comp_struct);
 
-
     /* Branch-and-Bound starts here */
+
 
     /* creating root node */
     createNode(n, b, it, intdata, x, constraint, &root, NULL, -1, 's', -1, bestobj, &queue, &nbTreeNodes);

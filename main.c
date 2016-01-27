@@ -11,7 +11,7 @@
 #include "./functions/others.h"
 
 // DEFINITION DE LA VARIABLE GLOBALE verbose
-char verbose = 'v'; /* 'v' for verbose */
+char verbose = 'n'; /* 'v' for verbose */
 
 int main(int argc, char* argv[])
 {
@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
 
     
     /* Below, for checking that the items have been reordered by decreasing utility. */
-    //displayData(n, b, it);
+//     displayData(n, b, it);
 
     ftime(&t1);
     cpu_time = (double)(t1.time - t0.time) + (double)(t1.millitm-t0.millitm)/1000.0;
