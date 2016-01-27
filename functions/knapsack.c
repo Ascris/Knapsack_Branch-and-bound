@@ -256,7 +256,10 @@ void loadInstance(char* filename, int *n, int *b, item **it)
 //     printdebug("Je sors de loadInstance\n");
 }
 
-int comp_struct(const void* p1, const void* p2)
+/*********************************************************/
+/*                       comp_struct                     */
+/*********************************************************/
+static int comp_struct(const void* p1, const void* p2)
 {
     /* TODO a verifier a l'execution */
     item i1 = *( (item*) p1);

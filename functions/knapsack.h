@@ -35,11 +35,6 @@ tab_items init_items(FILE* file, int items_nb);
 void loadInstance(char* filename, int *n, int *b, item **it);
 
 /*********************************************************/
-/*                       comp_struct                     */
-/*********************************************************/
-int comp_struct(const void* p1, const void* p2);
-
-/*********************************************************/
 /*                   solveRelaxation                     */
 /*********************************************************/
 /*                                                       */
