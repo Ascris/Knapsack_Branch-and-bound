@@ -1,9 +1,13 @@
 #ifndef KNAPSACK_H
 #define KNAPSACK_H
 
+#include <stdio.h>
+
 #include "./structures/item.h"
 #include "./structures/queue.h"
 #include "./structures/tree.h"
+
+typedef item* tab_items;
 
 char verbose; /* 'v' for verbose */
 
@@ -11,17 +15,12 @@ char verbose; /* 'v' for verbose */
 void createNode(int n, int b, item *it, char intdata, char *x, char *constraint, TREE *newnode, TREE pred, int var_id, char sign, int rhs, double *bestobj, QUEUE *queue, unsigned int *nbnode);
 
 /**
- * Parcours un fichier et retourne son nombre de lignes
  */
-int get_file_size(char *file_name);
-
-char** str_split(char* a_str, const char a_delim);
+char read_first_line(FILE* file, int* items_nb, int* capacity_nb);
 
 /**
- * Met chaque ligne d'un fichier dans un tableau de chaine de caractères
- * @param filename name of file to load
  */
-char** loadFile(char* filename);
+tab_items init_items(FILE* file, int items_nb);
 
 /*********************************************************/
 /*                     loadInstance                      */

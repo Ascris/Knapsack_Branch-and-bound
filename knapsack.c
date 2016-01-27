@@ -1,6 +1,5 @@
 #include "knapsack.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <sys/timeb.h>
@@ -124,140 +123,169 @@ void createNode(int n, int b, item *it, char intdata, char *x, char *constraint,
    }
 }
 
-int get_file_size(char *filename)
+// char** loadFile(char* filename, int *item_nb)
+// {
+//     char ** text= NULL;
+// 
+// // 	*item_nb= atoi(first_line);
+// 
+// 	free(ligne1);
+// 	=(char*)malloc(sizeof(char)*(strlen(ligne)+1));
+// 	
+// 	
+// 	text=(char**)malloc(sizeof(char*) * (*item_nb -1));
+// 	char ligne[30];
+// 	int num_ligne;
+// 	for(num_ligne=0; fgets(ligne, 30, file) != NULL;
+// 	    ++num_ligne)
+// 	{
+// 	    text[num_ligne]=(char*)malloc(sizeof(char)*(strlen(ligne)+1));
+// 	    strcpy(text[num_ligne],ligne);
+// 	    #if DEBUG
+// 	    printf("DEBUG : num_ligne du fichier : %d/%d de valeur %s", num_ligne, size ,text[num_ligne]);
+// 	    #endif
+// 	}
+// 	#if DEBUG
+// 	printf("\nNUMERO DE LIGNE A LA SORTIE : %d\n", num_ligne);
+// 	#endif
+// 	fclose(file);
+// 
+//     } else {
+// 	// On affiche un message d'erreur si on veut
+// 	fprintf(stderr, "%s\n","Impossible d'ouvrir le fichier \n");
+//     }
+// 
+//     return text;
+// }
+
+char read_first_line(FILE* file, int* items_nb, int* capacity)
 {
-   FILE *fp;
-   int file_size;
-   file_size = 0;
-   if ((fp = fopen(filename, "rb" )) == NULL) {
-      fprintf(stderr, "Cannot open %s.\n", filename);
-      return(file_size);
-   }
-   char ligne[30];
-   while(fgets(ligne, 30,fp) != NULL)
-    {
-	    file_size++;
-    }
-   fclose(fp);
-   return(file_size);
-}
-
-
-char** str_split(char* a_str, const char a_delim)
-{
-    char** result    = 0;
-    size_t count     = 0;
-    char* tmp        = a_str;
-    char* last_comma = 0;
-    char delim[2];
-    delim[0] = a_delim;
-    delim[1] = 0;
-
-    /* Count how many elements will be extracted. */
-    while (*tmp)
-    {
-        if (a_delim == *tmp)
-        {
-            count++;
-            last_comma = tmp;
-        }
-        tmp++;
-    }
-
-    /* Add space for trailing token. */
-    count += last_comma < (a_str + strlen(a_str) - 1);
-
-    /* Add space for terminating null string so caller
-       knows where the list of returned strings ends. */
-    count++;
-
-    result =(char**) malloc(sizeof(char*) * count);
-
-    if (result)
-    {
-        size_t idx  = 0;
-        char* token = strtok(a_str, delim);
-
-        while (token)
-        {
-            *(result + idx++) = strdup(token);
-            token = strtok(0, delim);
-        }
-        *(result + idx) = 0;
-    }
-
-    return result;
-}
-
-char** loadFile(char* filename)
-{
-    int size= get_file_size(filename);
-    char ** text= NULL;
-
-    FILE *file;
-    file= fopen(filename,"r");
-
+    char line[31];
+    
     if (file != NULL){
-	text=(char**)malloc(sizeof(char*)*size);
-	char ligne[30];
-	int num_ligne;
-	for(num_ligne=0; fgets(ligne, 30, file) != NULL;
-	    ++num_ligne)
-	{
-	    text[num_ligne]=(char*)malloc(sizeof(char)*(strlen(ligne)+1));
-	    strcpy(text[num_ligne],ligne);
-	    #if DEBUG
-	    printf("DEBUG : num_ligne du fichier : %d/%d de valeur %s", num_ligne, size ,text[num_ligne]);
-	    #endif
+	
+	if (fgets(line, 30, file) == NULL){
+	    fprintf(stderr, "File empty");
+	    return 0;
 	}
-	#if DEBUG
-	printf("\nNUMERO DE LIGNE A LA SORTIE : %d\n", num_ligne);
-	#endif
-	fclose(file);
 
-    } else {
-	// On affiche un message d'erreur si on veut
-	fprintf(stderr, "%s\n","Impossible d'ouvrir le fichier \n");
-    }
-
-    return text;
+	char* values= strtok (line," ");
+	if (values != NULL){
+	    printf ("1st value %s\n", values);
+	    *items_nb= atoi(values);
+	
+	    // next value
+	    values = strtok (NULL, " ");
+	}
+	else {
+	    fprintf(stderr, "No capacity value");
+	    return 0;
+	}
+	
+	if (values != NULL){
+	    printf ("2nb value %s\n", values);
+	    *capacity= atoi(values);
+	    // useless to get next value
+	}
+	else {
+	    fprintf(stderr, "No items number");
+	    return 0;
+	}
+    } else { return 0;}
+	
+    return 1;
 }
-// TODO deplacer
-//typedef *it it_ptr;
+
+tab_items init_items(FILE* file, int items_nb)
+{
+    char line[31];
+    
+    if (file != NULL)
+    {    
+	tab_items items= (tab_items)malloc(items_nb*sizeof(item));
+	
+	int i;
+	for (i= 0; i < items_nb; ++i){
+	    if (fgets(line, 30, file) == NULL){
+		fprintf(stderr, "File empty");
+		return 0;
+	    }
+	    
+	    // Value reading
+	    char* values= strtok(line, " ");
+	    if (values != NULL){
+		printf ("item id : %s\n", values);	    
+		items[i].id=	atoi(values);
+		// next value
+		values = strtok (NULL, " ");
+	    } else {
+		fprintf(stderr, "No id");
+		return 0;
+	    }
+	    
+	    if (values != NULL){
+		printf ("size : %s\n", values);
+		items[i].a=   atoi(values);
+		// next value
+		values = strtok (NULL, " ");
+	    } else {
+		fprintf(stderr, "No size");
+		return 0;
+	    }
+	    
+	    if (values != NULL){
+		printf ("cost : %s\n", values);
+		items[i].c=   atoi(values);
+		// useless to get next value
+	    } else {
+		fprintf(stderr, "No cost");
+		return 0;
+	    }
+	    
+	    printf("DEBUG : Item [%d] created : size %d, cost %d\n", items[i].id, items[i].a, items[i].c);
+	    
+	}
+	return items;
+	
+    } else {
+	fprintf(stderr, "Items creation impossible because file can't be read");
+	return NULL;
+    }
+}
+
+
 void loadInstance(char* filename, int *n, int *b, item **it)
 {
-
 /* TODO TO COMPLETE */
-    char** text= loadFile(filename);
 
-    char **ligne1=str_split(text[0],' ');
-    *n= atoi(ligne1[0]);
+// Variables
+    tab_items items= *it;
 
-    *it= (item*)malloc((*n)*sizeof(item)); // TODO vérifier
+// Reading
+    FILE *file;
+    file= fopen(filename,"r");
+    
+    if (file != NULL){
 
-    free(ligne1);
-
-    char **ligne;
-    int i;
-    for(i= 1; i < *n +1; i++)
-    {
-        ligne= *(str_split(text[i],' '));
-        int id=     atoi(ligne1[0]); // TODO USE
-        int size=   atoi(ligne1[1]); // TODO USE
-        int cost=   atoi(ligne1[2]); // TODO USE
-
-       (*item)[i].id= id;
-       (*item)[i].a= size;
-       (*item)[i].c= cost;
+	char line[31];
+	
+	// File record and instanciation of items 
+	int i;
+	for(i= 1; i <= *n; i++)
+	{
+	    if (read_first_line(file, n, b)){
+		fprintf(stderr, "First line reading impossible");
+		// exit for, verification needed at end of for to ensure
+		// there was not any problem during reading
+		break;
+	    }
+	    
+	    items= init_items(file, *n);
+	}
     }
-
-    // TODO faire suppression de text
-    // (on ne peut pas car on a pas size)
-    // -> utiliser variable globale ou changer loadFile
-//     for (i= 0; i < size; ++i){
-// 	free(text[i]);
-//     }
-    free(text);
+    else { //TODO ERROR 
+	
+    }
 #if DEBUG
     printf("Je sors de loadInstance\n");
 #endif
