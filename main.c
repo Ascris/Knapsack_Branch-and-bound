@@ -33,6 +33,12 @@ int main(int argc, char* argv[])
     if(verbose == 'v')
 	displayData(n, b, it);
 
+    BB(n, b, it, &bestobj);
+
+    printf("\nOptimal objective value is %lf",bestobj);
+    if(verbose == 'v')
+	displayOptimalSolution(n, it);
+    
     /*
      * Test de la fonction comp_struct
      */
@@ -49,12 +55,7 @@ int main(int argc, char* argv[])
     printf("testComp = %d", testComp);
     */
     
-    BB(n, b, it, &bestobj);
-
-    printf("\nOptimal objective value is %lf",bestobj);
-    if(verbose == 'v')
-	displayOptimalSolution(n, it);
-
+    
     /* Below, for checking that the items have been reordered by decreasing utility. */
     //displayData(n, b, it);
 
