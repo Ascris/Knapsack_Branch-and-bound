@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
     if(verbose == 'v')
 	displayOptimalSolution(n, it);
     
-    printdebug("\nLe tab_items[5] est de : %d", it[5].a);
+//     printdebug("\nLe tab_items[5] est de : %d", it[5].a);
     
     /*
      * Test de la fonction comp_struct
@@ -54,8 +54,9 @@ int main(int argc, char* argv[])
     qsort(it, n, sizeof(item), comp_struct);
     int i;
     for(i= 0; i < n; ++i){
-	int ratio = (it[i].c / it[i].a);
-	printdebug("\nid = %d with a ratio of %d", it[i].id, ratio);
+	float ratio = ((float)it[i].c / (float)it[i].a);
+	printf("\nid = %d with a ratio of %f", it[i].id, ratio);
+// 	printdebug("\nid = %d with a ratio of %d", it[i].id, ratio);
     }
     
     

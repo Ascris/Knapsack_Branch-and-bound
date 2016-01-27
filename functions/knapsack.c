@@ -117,8 +117,9 @@ void createNode(int n, int b, item *it, char intdata, char *x, char *constraint,
 		pred->suc0 = NULL;
 	    else if(rhs == 1)
 		pred->suc1 = NULL;
-	    else
-		printdebug("\nError with rhs, that is %d while it should be either 0 or 1.\n", rhs);
+	    else {
+// 		printdebug("\nError with rhs, that is %d while it should be either 0 or 1.\n", rhs);
+	    }
 	}
 	/* Current node deletion */
 	free(*newnode);
@@ -138,7 +139,7 @@ char read_first_line(FILE* file, int* items_nb, int* capacity)
 
 	char* values= strtok (line," ");
 	if (values != NULL){
-	    printdebug("1st value %s\n", values);
+// 	    printdebug("1st value %s\n", values);
 	    *items_nb= atoi(values);
 	
 	    // next value
@@ -150,7 +151,7 @@ char read_first_line(FILE* file, int* items_nb, int* capacity)
 	}
 	
 	if (values != NULL){
-	    printdebug("2nb value %s\n", values);
+// 	    printdebug("2nb value %s\n", values);
 	    *capacity= atoi(values);
 	    // useless to get next value
 	}
@@ -209,7 +210,7 @@ tab_items init_items(FILE* file, int items_nb)
 		return 0;
 	    }
 	    
-	    printdebug("DEBUG : Item [%d] created : size %d, cost %d\n", items[i].id, items[i].a, items[i].c);
+// 	    printdebug("DEBUG : Item [%d] created : size %d, cost %d\n", items[i].id, items[i].a, items[i].c);
 	    
 	}
 	return items;
@@ -244,7 +245,7 @@ void loadInstance(char* filename, int *n, int *b, item **it)
 	// verification needed after call of loadInstance to ensure
 	// there was not any problem during reading
     }
-    printdebug("Je sors de loadInstance\n");
+//     printdebug("Je sors de loadInstance\n");
 }
 
 int comp_struct(const void* p1, const void* p2)
@@ -252,7 +253,7 @@ int comp_struct(const void* p1, const void* p2)
 /* TODO a verifier a l'execution */
 item i1 = *( (item*) p1);
 item i2 = *( (item*) p2);
-int isGreaterThan = ( (i1.c/i1.a)  > (i2.c/i2.a) );
+float isGreaterThan = ( ((float)i1.c/(float)i1.a)  > ((float)i2.c/(float)i2.a) );
 
 // printf("\nL'item %d est plus grand que l'item %d", i1.id, i2.id);
 
