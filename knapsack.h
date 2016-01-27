@@ -36,7 +36,7 @@ void loadInstance(char* filename, int *n, int *b, item **it);
 /*                       comp_struct                     */
 /*********************************************************/
 // TODO FLORIAN : à voir si on garde le static
-static int comp_struct(const void* p1, const void* p2);
+int comp_struct(const void* p1, const void* p2);
 
 /*********************************************************/
 /*                   solveRelaxation                     */

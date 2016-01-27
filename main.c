@@ -39,23 +39,18 @@ int main(int argc, char* argv[])
     if(verbose == 'v')
 	displayOptimalSolution(n, it);
     
+    printf("\nLe tab_items[5] est de : %d", it[5].a);
+    
     /*
      * Test de la fonction comp_struct
      */
-    /*
-    item* i1 = (item*)malloc(sizeof(item));
-    item* i2 = (item*)malloc(sizeof(item));
-    i1->a = 1; i1->c = 2; i1->id = 1;
-    i2->a = 2; i2->c = 6; i2->id = 2;
-    
-    void* item1 = (item *)i1;
-    void* item2 = (item *)i2;
-    
-    int testComp = comp_struct(item1, item2);
-    printf("testComp = %d", testComp);
-    
-//     qsort(Ensemble des items (struct TREE t?), nb_elem dans t , sizeof(item), comp_struct);
-    */
+       
+    qsort(it, n, sizeof(item), comp_struct);
+    int i;
+    for(i= 0; i < n; ++i){
+	int ratio = (it[i].c / it[i].a);
+	printf("\nid = %d with a ratio of %d", it[i].id, ratio);
+    }
     
     
     /* Below, for checking that the items have been reordered by decreasing utility. */

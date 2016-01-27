@@ -247,14 +247,14 @@ void loadInstance(char* filename, int *n, int *b, item **it)
 #endif
 }
 
-static int comp_struct(const void* p1, const void* p2)
+int comp_struct(const void* p1, const void* p2)
 {
 /* TODO a verifier a l'execution */
 item i1 = *( (item*) p1);
 item i2 = *( (item*) p2);
+int isGreaterThan = ( (i1.c/i1.a)  > (i2.c/i2.a) );
 
-int isGreaterThan= compItem(i1, i2);
-printf("L'item %d est plus grand que l'item %d", i1.id, i2.id);
+// printf("\nL'item %d est plus grand que l'item %d", i1.id, i2.id);
 
 return isGreaterThan;
 } /* end of comp_struct */
