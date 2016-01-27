@@ -108,7 +108,7 @@ void createNode(int n, int b, item *it, char intdata, char *x, char *constraint,
 		    it[j].bestsol = x[j];
 		}
 	    }
-	
+
 	/* Updating the parent node pred, if it exists */
 	if(pred != NULL)
 	{
@@ -193,10 +193,10 @@ char** loadFile(char* filename)
 {
     int size= get_file_size(filename);
     char ** text= NULL;
-    
+
     FILE *file;
     file= fopen(filename,"r");
-    
+
     if (file != NULL){
 	text=(char**)malloc(sizeof(char*)*size);
 	char ligne[30];
@@ -214,7 +214,7 @@ char** loadFile(char* filename)
 	printf("\nNUMERO DE LIGNE A LA SORTIE : %d\n", num_ligne);
 	#endif
 	fclose(file);
-    
+
     } else {
 	// On affiche un message d'erreur si on veut
 	fprintf(stderr, "%s\n","Impossible d'ouvrir le fichier \n");
@@ -222,32 +222,35 @@ char** loadFile(char* filename)
 
     return text;
 }
-
+// TODO deplacer
+//typedef *it it_ptr;
 void loadInstance(char* filename, int *n, int *b, item **it)
 {
 
 /* TODO TO COMPLETE */
     char** text= loadFile(filename);
-    
+
     char **ligne1=str_split(text[0],' ');
-    int item_nb=atoi(ligne1[0]);
-    
-// 		init_size_vertices(&(graphe->vertices), nb_noeuds);
-    *it= (item*)malloc(item_nb*sizeof(item)); // TODO vÃ©rifier
-    
+    *n= atoi(ligne1[0]);
+
+    *it= (item*)malloc((*n)*sizeof(item)); // TODO vérifier
+
     free(ligne1);
-    
+
+    char **ligne;
     int i;
-    for(i= 1; i < item_nb +1; i++)
+    for(i= 1; i < *n +1; i++)
     {
-	char **ligne1=str_split(text[i],' ');
-	int coord_x=atoi(ligne1[0]); // TODO USE
-	int coord_y=atoi(ligne1[1]); // TODO USE
-	    
-// 	    add_vertice(&(graphe->vertices), coord_x,coord_y,i-1); TODO changer
-	    free(ligne1);
+        ligne= *(str_split(text[i],' '));
+        int id=     atoi(ligne1[0]); // TODO USE
+        int size=   atoi(ligne1[1]); // TODO USE
+        int cost=   atoi(ligne1[2]); // TODO USE
+
+       (*item)[i].id= id;
+       (*item)[i].a= size;
+       (*item)[i].c= cost;
     }
-    
+
     // TODO faire suppression de text
     // (on ne peut pas car on a pas size)
     // -> utiliser variable globale ou changer loadFile
@@ -381,7 +384,7 @@ void BB(int n, int b, item *it, double *bestobj)
     intdata = integerProfit(n, it);
 
     /* Sorting the items by decreasing utility */
-    
+
     /** TODO TO COMPLETE **/
 
     /* Branch-and-Bound starts here */
