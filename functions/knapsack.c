@@ -335,7 +335,9 @@ void BB(int n, int b, item *it, double *bestobj)
 
     /* Sorting the items by decreasing utility */
 
-    /** TODO TO COMPLETE **/
+    /** TODO Deja fini ? **/
+    qsort(it, n, sizeof(item), comp_struct);
+
 
     /* Branch-and-Bound starts here */
 
