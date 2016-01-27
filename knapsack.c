@@ -123,41 +123,6 @@ void createNode(int n, int b, item *it, char intdata, char *x, char *constraint,
    }
 }
 
-// char** loadFile(char* filename, int *item_nb)
-// {
-//     char ** text= NULL;
-// 
-// // 	*item_nb= atoi(first_line);
-// 
-// 	free(ligne1);
-// 	=(char*)malloc(sizeof(char)*(strlen(ligne)+1));
-// 	
-// 	
-// 	text=(char**)malloc(sizeof(char*) * (*item_nb -1));
-// 	char ligne[30];
-// 	int num_ligne;
-// 	for(num_ligne=0; fgets(ligne, 30, file) != NULL;
-// 	    ++num_ligne)
-// 	{
-// 	    text[num_ligne]=(char*)malloc(sizeof(char)*(strlen(ligne)+1));
-// 	    strcpy(text[num_ligne],ligne);
-// 	    #if DEBUG
-// 	    printf("DEBUG : num_ligne du fichier : %d/%d de valeur %s", num_ligne, size ,text[num_ligne]);
-// 	    #endif
-// 	}
-// 	#if DEBUG
-// 	printf("\nNUMERO DE LIGNE A LA SORTIE : %d\n", num_ligne);
-// 	#endif
-// 	fclose(file);
-// 
-//     } else {
-// 	// On affiche un message d'erreur si on veut
-// 	fprintf(stderr, "%s\n","Impossible d'ouvrir le fichier \n");
-//     }
-// 
-//     return text;
-// }
-
 char read_first_line(FILE* file, int* items_nb, int* capacity)
 {
     char line[31];
@@ -253,13 +218,9 @@ tab_items init_items(FILE* file, int items_nb)
     }
 }
 
-
 void loadInstance(char* filename, int *n, int *b, item **it)
 {
 /* TODO TO COMPLETE */
-
-// Variables
-    tab_items items= *it;
 
 // Reading
     FILE *file;
@@ -270,18 +231,20 @@ void loadInstance(char* filename, int *n, int *b, item **it)
 	char line[31];
 	
 	// File record and instanciation of items 
-	if (!read_first_line(file, n, b)){
+	if (read_first_line(file, n, b)){
+	    int i;
+	    *it= init_items(file, *n);
+	}
+	else {
 	    fprintf(stderr, "First line reading impossible");
 	    // exit for, verification needed at end of for to ensure
 	    // there was not any problem during reading
 	}
-	else {
-	    int i;
-	    items= init_items(file, *n);
-	}
     }
     else { //TODO ERROR 
-	
+	fprintf(stderr, "File reading impossible");
+	// exit for, verification needed at end of for to ensure
+	// there was not any problem during reading
     }
 #if DEBUG
     printf("Je sors de loadInstance\n");
@@ -339,7 +302,7 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
     //on prend en compte constraint avant de commencer
     constraint = x;
     
-    //si tous les items qui sont dans constraint dÃ©passent la taille du sac, le problem est infaisable
+    //si tous les items qui sont dans constraint dépassent la taille du sac, le problem est infaisable
     int nbConstraints, totalPoidsItems = 0;
     for(nbConstraints= 0; nbConstraints < n; ++nbConstraints){
 	if(constraint[nbConstraints] == '1'){
@@ -367,7 +330,7 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 	    }
 	}
     }//le sac est plein
-    //calcul de la valeur de l'objectif actuel TODO fonction Ã  faire pour calculer ceci
+    //calcul de la valeur de l'objectif actuel TODO fonction à faire pour calculer ceci
     double valObjectif= 0.0;
     int itemPresent;
     for(itemPresent= 0; itemPresent < n; ++itemPresent){

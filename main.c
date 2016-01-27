@@ -11,7 +11,7 @@
 
 
 // DEFINITION DE LA VARIABLE GLOBALE verbose
-char verbose = 'n'; /* 'v' for verbose */
+char verbose = 'v'; /* 'v' for verbose */
 
 int main(int argc, char* argv[])
 {
@@ -33,9 +33,9 @@ int main(int argc, char* argv[])
     if(verbose == 'v')
 	displayData(n, b, it);
 
-    BB(n, b, it, &bestobj);
+//     BB(n, b, it, &bestobj);
 
-    printf("\nOptimal objective value is %lf",bestobj);
+//     printf("\nOptimal objective value is %lf",bestobj);
     if(verbose == 'v')
 	displayOptimalSolution(n, it);
     
@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
     int testComp = comp_struct(item1, item2);
     printf("testComp = %d", testComp);
     
-    qsort(Ensemble des items (struct TREE t?), nb_elem dans t , sizeof(item), comp_struct);
+//     qsort(Ensemble des items (struct TREE t?), nb_elem dans t , sizeof(item), comp_struct);
     */
     
     
