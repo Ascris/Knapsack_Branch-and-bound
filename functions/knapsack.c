@@ -253,7 +253,7 @@ int comp_struct(const void* p1, const void* p2)
 /* TODO a verifier a l'execution */
 item i1 = *( (item*) p1);
 item i2 = *( (item*) p2);
-float isGreaterThan = ( ((float)i1.c/(float)i1.a)  > ((float)i2.c/(float)i2.a) );
+float isGreaterThan = ( ((float)i1.c/(float)i1.a)  < ((float)i2.c/(float)i2.a) );
 
 // printf("\nL'item %d est plus grand que l'item %d", i1.id, i2.id);
 
