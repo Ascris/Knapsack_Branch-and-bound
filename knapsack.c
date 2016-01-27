@@ -191,9 +191,9 @@ char read_first_line(FILE* file, int* items_nb, int* capacity)
 	    fprintf(stderr, "No items number");
 	    return 0;
 	}
-    } else { return 0;}
 	
-    return 1;
+	return 1;
+    } else { return 0;}
 }
 
 tab_items init_items(FILE* file, int items_nb)
@@ -273,7 +273,7 @@ void loadInstance(char* filename, int *n, int *b, item **it)
 	int i;
 	for(i= 1; i <= *n; i++)
 	{
-	    if (read_first_line(file, n, b)){
+	    if (!read_first_line(file, n, b)){
 		fprintf(stderr, "First line reading impossible");
 		// exit for, verification needed at end of for to ensure
 		// there was not any problem during reading
