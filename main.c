@@ -53,6 +53,8 @@ int main(int argc, char* argv[])
     
     int testComp = comp_struct(item1, item2);
     printf("testComp = %d", testComp);
+    
+    qsort(Ensemble des items (struct TREE t?), nb_elem dans t , sizeof(item), comp_struct);
     */
     
     
