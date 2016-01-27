@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
     if(verbose == 'v')
 	displayData(n, b, it);
 
-//     BB(n, b, it, &bestobj);
+    BB(n, b, it, &bestobj);
 
 //     printf("\nOptimal objective value is %lf",bestobj);
     if(verbose == 'v')
