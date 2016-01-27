@@ -7,7 +7,7 @@
 #include "../structures/queue.h"
 #include "../structures/tree.h"
 
-typedef char boolean;
+typedef int boolean;
 
 typedef item* tab_items;
 
@@ -37,7 +37,6 @@ void loadInstance(char* filename, int *n, int *b, item **it);
 /*********************************************************/
 /*                       comp_struct                     */
 /*********************************************************/
-// TODO FLORIAN : à voir si on garde le static
 int comp_struct(const void* p1, const void* p2);
 
 /*********************************************************/
