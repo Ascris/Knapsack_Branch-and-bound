@@ -5,6 +5,8 @@
 #include <sys/timeb.h>
 #include <string.h>
 
+#include "others.h"
+
 char verbose; /* defined in main.c */
 
 void createNode(int n, int b, item *it, char intdata, char *x, char *constraint, TREE *newnode, TREE pred, int var_id, char sign, int rhs, double *bestobj, QUEUE *queue, unsigned int *nbnode)
@@ -116,7 +118,7 @@ void createNode(int n, int b, item *it, char intdata, char *x, char *constraint,
 	    else if(rhs == 1)
 		pred->suc1 = NULL;
 	    else
-		printf("\nError with rhs, that is %d while it should be either 0 or 1.\n", rhs);
+		printdebug("\nError with rhs, that is %d while it should be either 0 or 1.\n", rhs);
 	}
 	/* Current node deletion */
 	free(*newnode);
@@ -127,8 +129,8 @@ char read_first_line(FILE* file, int* items_nb, int* capacity)
 {
     char line[31];
     
-    if (file != NULL){
-	
+    if (file != NULL)
+    {
 	if (fgets(line, 30, file) == NULL){
 	    fprintf(stderr, "File empty");
 	    return 0;
@@ -136,7 +138,7 @@ char read_first_line(FILE* file, int* items_nb, int* capacity)
 
 	char* values= strtok (line," ");
 	if (values != NULL){
-	    printf ("1st value %s\n", values);
+	    printdebug("1st value %s\n", values);
 	    *items_nb= atoi(values);
 	
 	    // next value
@@ -148,7 +150,7 @@ char read_first_line(FILE* file, int* items_nb, int* capacity)
 	}
 	
 	if (values != NULL){
-	    printf ("2nb value %s\n", values);
+	    printdebug("2nb value %s\n", values);
 	    *capacity= atoi(values);
 	    // useless to get next value
 	}
@@ -207,7 +209,7 @@ tab_items init_items(FILE* file, int items_nb)
 		return 0;
 	    }
 	    
-	    printf("DEBUG : Item [%d] created : size %d, cost %d\n", items[i].id, items[i].a, items[i].c);
+	    printdebug("DEBUG : Item [%d] created : size %d, cost %d\n", items[i].id, items[i].a, items[i].c);
 	    
 	}
 	return items;
@@ -233,18 +235,16 @@ void loadInstance(char* filename, int *n, int *b, item **it)
 	}
 	else {
 	    fprintf(stderr, "First line reading impossible");
-	    // exit for, verification needed at end of for to ensure
+	    // verification needed after call of loadInstance to ensure
 	    // there was not any problem during reading
 	}
     }
-    else { //TODO ERROR 
+    else {
 	fprintf(stderr, "File reading impossible");
-	// exit for, verification needed at end of for to ensure
+	// verification needed after call of loadInstance to ensure
 	// there was not any problem during reading
     }
-#if DEBUG
-    printf("Je sors de loadInstance\n");
-#endif
+    printdebug("Je sors de loadInstance\n");
 }
 
 int comp_struct(const void* p1, const void* p2)

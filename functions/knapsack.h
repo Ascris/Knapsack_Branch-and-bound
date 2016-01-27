@@ -3,9 +3,9 @@
 
 #include <stdio.h>
 
-#include "./structures/item.h"
-#include "./structures/queue.h"
-#include "./structures/tree.h"
+#include "../structures/item.h"
+#include "../structures/queue.h"
+#include "../structures/tree.h"
 
 typedef item* tab_items;
 

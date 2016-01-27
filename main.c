@@ -7,8 +7,8 @@
 #include <sys/timeb.h>
 
 #include "./structures/item.h"
-#include "./knapsack.h"
-
+#include "./functions/knapsack.h"
+#include "./functions/others.h"
 
 // DEFINITION DE LA VARIABLE GLOBALE verbose
 char verbose = 'v'; /* 'v' for verbose */
@@ -25,11 +25,17 @@ int main(int argc, char* argv[])
     ftime(&t0);
     if(argc != 2)
     {
-	printf("\nPlease, call the program with an argument, that is the instance file name.\n");
+	fprintf(stderr, "\nPlease, call the program with an argument, that is the instance file name.\n");
 	exit(EXIT_FAILURE);
     }
 
     loadInstance(argv[1], &n, &b, &it);
+    if (it == NULL ){
+	// STOP EXECUTION
+	fprintf(stderr, "Error while loading data file");
+	return EXIT_FAILURE;
+    }
+    
     if(verbose == 'v')
 	displayData(n, b, it);
 
@@ -39,7 +45,7 @@ int main(int argc, char* argv[])
     if(verbose == 'v')
 	displayOptimalSolution(n, it);
     
-    printf("\nLe tab_items[5] est de : %d", it[5].a);
+    printdebug("\nLe tab_items[5] est de : %d", it[5].a);
     
     /*
      * Test de la fonction comp_struct
@@ -49,7 +55,7 @@ int main(int argc, char* argv[])
     int i;
     for(i= 0; i < n; ++i){
 	int ratio = (it[i].c / it[i].a);
-	printf("\nid = %d with a ratio of %d", it[i].id, ratio);
+	printdebug("\nid = %d with a ratio of %d", it[i].id, ratio);
     }
     
     
