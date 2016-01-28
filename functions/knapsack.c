@@ -275,6 +275,12 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 {
     /* TODO TO COMPLETE */
     
+    /**
+     * Because we use this fonction on an array of item sorted by decreasing utility, the first fractionnal item is the best item to fills the bag.
+     * When we meet this one, we won't need any of the remaining items (so we put their value in x to '0')
+     */
+    
+    
     //if the total size of all the items presents in the knapsack exceeds the knapsack size, the problem is infeasible
     int num_constraints;
     unsigned int totalPoidsItems = 0;
@@ -289,10 +295,6 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
     }
     //if the execution is at this point, there is some space left in the bag
 
-    
-    printf("\nPoids = %d -> ajout de %d", totalPoidsItems, it[num_constraints].a);
-
-
     int indiceIt;
     for(indiceIt= 0; indiceIt < n; ++indiceIt){
 	if(constraint[indiceIt] == 'F'){
@@ -306,20 +308,19 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 		//printf("\nItem %d can be put in the bag, profit : %d", it[indiceIt].id, it[indiceIt].c);
 		//the item added to the knapsack will become a condition to check up
 		x[indiceIt] = '1';
-		objx+= it[indiceIt].c;
-		(*frac_item) = -1;
+		(*objx)+= it[indiceIt].c;
 	    } else if (totalPoidsItems+it[indiceIt].a == b){
 		    //the item fills the knapsack until its maximum size ; we add it into the knapsack
-		    totalPoidsItems+= it[indiceIt].a;
 		    (*objx)+= it[indiceIt].c;
 		    (*frac_item) = -1;
 		    return 'i';
 	    } else {
-		//the item is too large, we will have to add some part of it
+		//the item is too large, we will have to add some part of it (fractionnal item)
 
 		printf("\nOn passe au fractionnal avec l'item %d qui depasserait du sac (%d > %d)", indiceIt, totalPoidsItems+it[indiceIt].a, b);
 		int subst = indiceIt;
 		int repriseAvanceeIndice;
+		x[indiceIt] = '?';
 		for(repriseAvanceeIndice= subst+1; repriseAvanceeIndice < n; ++repriseAvanceeIndice){
 		    printf("\nOn met a ? la case : %d sur %d dans constraint", repriseAvanceeIndice, n);
 		    x[repriseAvanceeIndice] = '0';
