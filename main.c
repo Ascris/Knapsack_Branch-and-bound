@@ -42,8 +42,9 @@ int main(int argc, char* argv[])
     // Algorithm
     BB(n, b, it, &bestobj);
 
-//     printf("\nOptimal objective value is %lf",bestobj);
+    printf("\nOptimal objective value is %lf",bestobj);
     if(verbose == 'v')
+	
 	displayOptimalSolution(n, it);
 
     
