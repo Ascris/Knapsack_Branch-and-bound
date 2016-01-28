@@ -275,10 +275,10 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 {
     /* TODO TO COMPLETE */
     
-    //on prend en compte constraint avant de commencer TODO
+    //do not forget the constraint before we start
     constraint = x;
     
-    //si tous les items qui sont dans constraint dépassent la taille du sac, le problem est infaisable TODO
+    //if the total size of all the items presents in the knapsack exceeds the knapsack size, the problem is infeasible
     int num_constraints, totalPoidsItems = 0;
     for(num_constraints= 0; num_constraints < n; ++num_constraints){
 	if(constraint[num_constraints] == '1'){
@@ -295,21 +295,33 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 	int indiceIt;
 	for(indiceIt= 0; indiceIt < n; ++indiceIt){
 	    // Check if the item fits in the bag
-	    /// TODO est-ce qu'il faut utiliser x ou constraint ?
+	    //should we better use x or constraint ?
+	    
+	    //if the free space remaining in the bag is equal to the size of the item
+	    if(it[indiceIt].a == (b-fill_bag)) {
+		//we add the item and the bag is full
+		fill_bag+= it[indiceIt].a;
+		objx+= it[indiceIt].c;
+		return 'i';
+		
+	    }
+	    
+	    
 	    if(it[indiceIt].a <= (b-fill_bag)){
-		//l'item peut etre ajoute au Sac TODO
+		//the item can be added to the knapsack
 		fill_bag+= it[indiceIt].a;
 		printf("Item %d can be put in the bag, profit : %d", it[indiceIt].id, it[indiceIt].c);
-		//l'item ajouté au Sac DEVIENDRA une condition a verifier TODO
+		//the item added to the knapsack will become a condition to check up
 		x[indiceIt] = '1';
+		objx+= it[indiceIt].c;
 	    } else {
-		//on doit fractionner l'item car il n'y a pas la place pour l'inserer en entier TODO
+		//the item is too large, we will have to add some part of it
 		x[indiceIt] = '0';
 		(*frac_item) = indiceIt;
 	    }
 	}
     }// the bag is full
-    //calcul de la valeur de l'objectif actuel TODO fonction à faire pour calculer ceci
+    //computing the value of the current objective / create a function for that ?
     double valObjectif= 0.0;
     int itemPresent;
     for(itemPresent= 0; itemPresent < n; ++itemPresent){
