@@ -282,17 +282,19 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
     
     
     //if the total size of all the items presents in the knapsack exceeds the knapsack size, the problem is infeasible
-    int num_constraints;
+    int num_constraints, total_constraint_items = 0;
     unsigned int totalPoidsItems = 0;
     for(num_constraints= 0; num_constraints < n; ++num_constraints){
 	if(constraint[num_constraints] == '1'){
 	    x[num_constraints] = '1';
 	    (*objx)+= it[num_constraints].c;
-	    printf("\nPoids = %d -> ajout de %d", totalPoidsItems, it[num_constraints].a);
+	    ++total_constraint_items;
+// 	    printf("\ntotalPoidsItems = %d -> ajout de l'item %d de poids %d", totalPoidsItems, it[num_constraints].id, it[num_constraints].a);
 	    totalPoidsItems+= it[num_constraints].a;
 	    if(totalPoidsItems > b) return 'u';
 	}
     }
+    printf("\n*****************\nIl y a %d items dans constraint\n*****************\n", total_constraint_items);
     //if the execution is at this point, there is some space left in the bag
 
     int indiceIt;
@@ -322,7 +324,7 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 		int repriseAvanceeIndice;
 		x[indiceIt] = '?';
 		for(repriseAvanceeIndice= subst+1; repriseAvanceeIndice < n; ++repriseAvanceeIndice){
-		    printf("\nOn met a ? la case : %d sur %d dans constraint", repriseAvanceeIndice, n);
+		    printf("\nOn met a 0 la case : %d sur %d dans constraint", repriseAvanceeIndice, n);
 		    x[repriseAvanceeIndice] = '0';
 		}
 		
