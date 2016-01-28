@@ -4,7 +4,7 @@
 struct s_item{
     unsigned int id;//identifier
     int a;//size
-    int c;//cost
+    int c;//profit
     char bestsol; /* '0' unselected, '1' selected, '?' undefined */
 };
 typedef struct s_item item;

@@ -275,15 +275,15 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 {
     /* TODO TO COMPLETE */
     
-    //on prend en compte constraint avant de commencer
+    //on prend en compte constraint avant de commencer TODO
     constraint = x;
     
-    //si tous les items qui sont dans constraint dépassent la taille du sac, le problem est infaisable
-    int nbConstraints, totalPoidsItems = 0;
-    for(nbConstraints= 0; nbConstraints < n; ++nbConstraints){
-	if(constraint[nbConstraints] == '1'){
-	    totalPoidsItems+= it[nbConstraints].a;
-	    if(totalPoidsItems < b) return 'u';
+    //si tous les items qui sont dans constraint dépassent la taille du sac, le problem est infaisable TODO
+    int num_constraints, totalPoidsItems = 0;
+    for(num_constraints= 0; num_constraints < n; ++num_constraints){
+	if(constraint[num_constraints] == '1'){
+	    totalPoidsItems+= it[num_constraints].a;
+	    if(totalPoidsItems > b) return 'u';
 	}
     }
     //if the execution is at this point, there is some space left in the bag
@@ -294,13 +294,16 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
     {
 	int indiceIt;
 	for(indiceIt= 0; indiceIt < n; ++indiceIt){
-	    if(it[indiceIt].c < (b-fill_bag)){
-		//l'item peut etre ajoute au Sac
+	    // Check if the item fits in the bag
+	    /// TODO est-ce qu'il faut utiliser x ou constraint ?
+	    if(it[indiceIt].a <= (b-fill_bag)){
+		//l'item peut etre ajoute au Sac TODO
 		fill_bag+= it[indiceIt].a;
-		//l'item ajoute au Sac DEVIENDRA une condition a verifier
+		printf("Item %d can be put in the bag, profit : %d", it[indiceIt].id, it[indiceIt].c);
+		//l'item ajouté au Sac DEVIENDRA une condition a verifier TODO
 		x[indiceIt] = '1';
-	    } else{
-		//on doit fractionner l'item car il n'y a pas la place pour l'inserer en entier
+	    } else {
+		//on doit fractionner l'item car il n'y a pas la place pour l'inserer en entier TODO
 		x[indiceIt] = '0';
 		(*frac_item) = indiceIt;
 	    }
@@ -347,7 +350,6 @@ void BB(int n, int b, item *it, double *bestobj)
     /* Sorting the items by decreasing utility */
 
     /** TO COMPLETE **/
-    /** TODO Deja fini ? **/
     qsort(it, n, sizeof(item), comp_struct);
 
     /* Branch-and-Bound starts here */
