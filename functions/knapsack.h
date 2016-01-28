@@ -13,6 +13,8 @@ typedef item* tab_items;
 
 char verbose; /* 'v' for verbose */
 
+char integerProfit(int n, item * it);
+
 
 void createNode(int n, int b, item *it, char intdata, char *x, char *constraint, TREE *newnode, TREE pred, int var_id, char sign, int rhs, double *bestobj, QUEUE *queue, unsigned int *nbnode);
 

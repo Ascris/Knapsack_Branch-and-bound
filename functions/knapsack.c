@@ -51,9 +51,9 @@ void createNode(int n, int b, item *it, char intdata, char *x, char *constraint,
     (*newnode)->status = status;
     (*newnode)->obj = objx;
 
+    
     //displaySol(n, b, it, x, objx);
-    //char integerProfit(int n, item * it)
-
+    
 
     /* A new node is created only if its status is 'f' and its objective is stricly larger than *bestobj */
     if(status == 'f' && *bestobj < (intdata == '1'?floor(objx):objx))
@@ -275,52 +275,67 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 {
     /* TODO TO COMPLETE */
     
-    //do not forget the constraint before we start
-    constraint = x;
-    
     //if the total size of all the items presents in the knapsack exceeds the knapsack size, the problem is infeasible
-    int num_constraints, totalPoidsItems = 0;
+    int num_constraints;
+    unsigned int totalPoidsItems = 0;
     for(num_constraints= 0; num_constraints < n; ++num_constraints){
 	if(constraint[num_constraints] == '1'){
 	    x[num_constraints] = '1';
 	    (*objx)+= it[num_constraints].c;
+	    printf("\nPoids = %d -> ajout de %d", totalPoidsItems, it[num_constraints].a);
 	    totalPoidsItems+= it[num_constraints].a;
 	    if(totalPoidsItems > b) return 'u';
 	}
+	printf("Pas encore de contraite\n");
     }
     //if the execution is at this point, there is some space left in the bag
+
     
-    int indiceIt, fill_bag = 0;
+    printf("\nPoids = %d -> ajout de %d", totalPoidsItems, it[num_constraints].a);
+
+
+    int indiceIt;
     for(indiceIt= 0; indiceIt < n; ++indiceIt){
 	if(constraint[indiceIt] == 'F'){
-	// Check if the item fits in the bag
-	//should we better use x or constraint ?
+// 	    printf("\nTreatment of item %d", indiceIt);
+	    // Check if the item fits in the bag
 
-	    if(it[indiceIt].a < (b-fill_bag)){
+	    if(totalPoidsItems+it[indiceIt].a < b){
 		//the item can be added to the knapsack
-		fill_bag+= it[indiceIt].a;
-		printf("Item %d can be put in the bag, profit : %d", it[indiceIt].id, it[indiceIt].c);
+		printf("\nThe item %d can be added to the knapsack : %d et %d = %d < %d", indiceIt, totalPoidsItems, it[indiceIt].a, totalPoidsItems+it[indiceIt].a, b);
+		totalPoidsItems+= it[indiceIt].a;
+		//printf("\nItem %d can be put in the bag, profit : %d", it[indiceIt].id, it[indiceIt].c);
 		//the item added to the knapsack will become a condition to check up
 		x[indiceIt] = '1';
 		objx+= it[indiceIt].c;
-	    } else if (it[indiceIt].a == (b-fill_bag)){
-		//the item fills the knapsack until its maximum size ; we add it into the knapsack
-		fill_bag+= it[indiceIt].a;
-		(*objx)+= it[indiceIt].c;
-		return 'i';
+		(*frac_item) = -1;
+	    } else if (totalPoidsItems+it[indiceIt].a == b){
+		    //the item fills the knapsack until its maximum size ; we add it into the knapsack
+		    totalPoidsItems+= it[indiceIt].a;
+		    (*objx)+= it[indiceIt].c;
+		    (*frac_item) = -1;
+		    return 'i';
 	    } else {
 		//the item is too large, we will have to add some part of it
-		(*frac_item) = indiceIt;
-// 		x[indiceIt] = '0';
 		
+		int subst = indiceIt;
 		int repriseAvanceeIndice;
-		for(repriseAvanceeIndice= indiceIt; repriseAvanceeIndice < n; ++repriseAvanceeIndice){
+		for(repriseAvanceeIndice= subst+1; repriseAvanceeIndice < n; ++repriseAvanceeIndice){
+		    printf("\nOn met a 0 la case : %d sur %d", repriseAvanceeIndice, n);
 		    x[repriseAvanceeIndice] = '0';
 		}
+		
+		(*frac_item) = indiceIt;
+		//computing the proportion of the item that is added to the objective value
+		double res = 0.0;
+		res = (float)totalPoidsItems/(float)(it[indiceIt].a);
+		printf("\nFractionnal adding : %f", res);
+		(*objx)+= res;
 		
 		return 'f';
 	    }
 	}//if the item is not free, we don't use it
+// 	printf("\nx[%d] is not equal to 'F'", indiceIt);
     }//end of the process of the items
     
     return '\0';
