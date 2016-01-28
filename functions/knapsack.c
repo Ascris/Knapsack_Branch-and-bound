@@ -283,6 +283,7 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
     for(num_constraints= 0; num_constraints < n; ++num_constraints){
 	if(constraint[num_constraints] == '1'){
 	    x[num_constraints] = '1';
+	    (*objx)+= it[num_constraints].c;
 	    totalPoidsItems+= it[num_constraints].a;
 	    if(totalPoidsItems > b) return 'u';
 	}
@@ -305,34 +306,22 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 	    } else if (it[indiceIt].a == (b-fill_bag)){
 		//the item fills the knapsack until its maximum size ; we add it into the knapsack
 		fill_bag+= it[indiceIt].a;
-		objx+= it[indiceIt].c;
+		(*objx)+= it[indiceIt].c;
 		return 'i';
 	    } else {
 		//the item is too large, we will have to add some part of it
-		//TODO comment calculer frac_item ? Mystère et boule de chewing-gum...
 		(*frac_item) = indiceIt;
+// 		x[indiceIt] = '0';
+		
 		int repriseAvanceeIndice;
 		for(repriseAvanceeIndice= indiceIt; repriseAvanceeIndice < n; ++repriseAvanceeIndice){
 		    x[repriseAvanceeIndice] = '0';
 		}
+		
 		return 'f';
 	    }
 	}//if the item is not free, we don't use it
     }//end of the process of the items
-    
-    //Ceci est-il intelligent ou ne serait-ce qu'utile ?
-    /*
-    //computing the value of the current objective / create a function for that ?
-    double valObjectif= 0.0;
-    int itemPresent;
-    for(itemPresent= 0; itemPresent < n; ++itemPresent){
-	if(x[itemPresent] == '1'){
-	    //item present = ajout au total de l'objectif
-	    valObjectif+= it[itemPresent].c;
-	}
-    }
-    (*objx) = valObjectif;
-    */
     
     return '\0';
 }
