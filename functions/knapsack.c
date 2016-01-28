@@ -282,46 +282,43 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
     int num_constraints, totalPoidsItems = 0;
     for(num_constraints= 0; num_constraints < n; ++num_constraints){
 	if(constraint[num_constraints] == '1'){
+	    x[num_constraints] = '1';
 	    totalPoidsItems+= it[num_constraints].a;
 	    if(totalPoidsItems > b) return 'u';
 	}
     }
     //if the execution is at this point, there is some space left in the bag
     
-    int fill_bag = 0;
-    while(fill_bag < b)
-    {
-	int indiceIt;
-	for(indiceIt= 0; indiceIt < n; ++indiceIt){
-	    if(constraint[indiceIt] == 'F'){
-	    // Check if the item fits in the bag
-	    //should we better use x or constraint ?
+    int indiceIt, fill_bag = 0;
+    for(indiceIt= 0; indiceIt < n; ++indiceIt){
+	if(constraint[indiceIt] == 'F'){
+	// Check if the item fits in the bag
+	//should we better use x or constraint ?
 
-		if(it[indiceIt].a < (b-fill_bag)){
-		    //the item can be added to the knapsack
-		    fill_bag+= it[indiceIt].a;
-		    printf("Item %d can be put in the bag, profit : %d", it[indiceIt].id, it[indiceIt].c);
-		    //the item added to the knapsack will become a condition to check up
-		    x[indiceIt] = '1';
-		    objx+= it[indiceIt].c;
-		} else if (it[indiceIt].a == (b-fill_bag)){
-		    //the item fills the knapsack until its maximum size ; we add it into the knapsack
-		    fill_bag+= it[indiceIt].a;
-		    objx+= it[indiceIt].c;
-		    return 'i';
-		} else {
-		    //the item is too large, we will have to add some part of it
-		    //TODO comment calculer frac_item ? Mystère et boule de chewing-gum...
-		    (*frac_item) = indiceIt;
-		    int repriseAvanceeIndice;
-		    for(repriseAvanceeIndice= indiceIt; repriseAvanceeIndice < n; ++repriseAvanceeIndice){
-			x[repriseAvanceeIndice] = '0';
-		    }
-		    return 'f';
+	    if(it[indiceIt].a < (b-fill_bag)){
+		//the item can be added to the knapsack
+		fill_bag+= it[indiceIt].a;
+		printf("Item %d can be put in the bag, profit : %d", it[indiceIt].id, it[indiceIt].c);
+		//the item added to the knapsack will become a condition to check up
+		x[indiceIt] = '1';
+		objx+= it[indiceIt].c;
+	    } else if (it[indiceIt].a == (b-fill_bag)){
+		//the item fills the knapsack until its maximum size ; we add it into the knapsack
+		fill_bag+= it[indiceIt].a;
+		objx+= it[indiceIt].c;
+		return 'i';
+	    } else {
+		//the item is too large, we will have to add some part of it
+		//TODO comment calculer frac_item ? Mystère et boule de chewing-gum...
+		(*frac_item) = indiceIt;
+		int repriseAvanceeIndice;
+		for(repriseAvanceeIndice= indiceIt; repriseAvanceeIndice < n; ++repriseAvanceeIndice){
+		    x[repriseAvanceeIndice] = '0';
 		}
-	    }//if the item is not free, we don't use it
-	}
-    }// the bag is full
+		return 'f';
+	    }
+	}//if the item is not free, we don't use it
+    }//end of the process of the items
     
     //Ceci est-il intelligent ou ne serait-ce qu'utile ?
     /*
