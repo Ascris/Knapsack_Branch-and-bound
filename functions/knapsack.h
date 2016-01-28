@@ -6,12 +6,14 @@
 #include "../structures/item.h"
 #include "../structures/queue.h"
 #include "../structures/tree.h"
+#include "others.h"
 
 typedef int boolean;
 
 typedef item* tab_items;
 
 char verbose; /* 'v' for verbose */
+
 
 char integerProfit(int n, item * it);
 

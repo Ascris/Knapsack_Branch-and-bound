@@ -2,15 +2,9 @@
 #define OTHERS_H
 
 #include <stdio.h>
-// #define DEBUG 1
+#include <stdarg.h>
 
-/*
+void printdebug( const char * format, ... )
+__attribute__ ((format (printf, 1, 2)));
 
-void printdebug( const char * format, ... ){   
-#if DEBUG
-    va_list ap;
-    printf(format, ap);
-#endif
-}
-*/
 #endif

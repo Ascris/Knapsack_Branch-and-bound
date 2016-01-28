@@ -5,9 +5,8 @@
 #include <sys/timeb.h>
 #include <string.h>
 
-#include "others.h"
-
 char verbose; /* defined in main.c */
+
 
 void createNode(int n, int b, item *it, char intdata, char *x, char *constraint, TREE *newnode, TREE pred, int var_id, char sign, int rhs, double *bestobj, QUEUE *queue, unsigned int *nbnode)
 {
@@ -126,6 +125,7 @@ void createNode(int n, int b, item *it, char intdata, char *x, char *constraint,
    }
 }
 
+
 boolean read_first_line(FILE* file, int* items_nb, int* capacity)
 {
     char line[31];
@@ -162,13 +162,6 @@ boolean read_first_line(FILE* file, int* items_nb, int* capacity)
 	
 	return 1;
     } else { return 0;}
-}
-
-void printdebug( const char * format, ... ){   
-#if DEBUG
-    va_list ap;
-    printf(format, ap);
-#endif
 }
 
 tab_items init_items(FILE* file, int items_nb)
