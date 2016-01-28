@@ -297,30 +297,30 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 	    // Check if the item fits in the bag
 	    //should we better use x or constraint ?
 	    
-	    //if the free space remaining in the bag is equal to the size of the item
-	    if(it[indiceIt].a == (b-fill_bag)) {
-		//we add the item and the bag is full
-		fill_bag+= it[indiceIt].a;
-		objx+= it[indiceIt].c;
-		return 'i';
-		
-	    }
-	    
-	    
-	    if(it[indiceIt].a <= (b-fill_bag)){
+	    if(it[indiceIt].a < (b-fill_bag)){
 		//the item can be added to the knapsack
 		fill_bag+= it[indiceIt].a;
 		printf("Item %d can be put in the bag, profit : %d", it[indiceIt].id, it[indiceIt].c);
 		//the item added to the knapsack will become a condition to check up
 		x[indiceIt] = '1';
 		objx+= it[indiceIt].c;
+	    } else if (it[indiceIt].a == (b-fill_bag)){
+		//the item fills the knapsack until its maximum size ; we add it into the knapsack
+		fill_bag+= it[indiceIt].a;
+		objx+= it[indiceIt].c;
+		return 'i';
 	    } else {
 		//the item is too large, we will have to add some part of it
+		//TODO comment calculer frac_item ? Mystère et boule de chewing-gum...
 		x[indiceIt] = '0';
 		(*frac_item) = indiceIt;
+		return 'f';
 	    }
 	}
     }// the bag is full
+    
+    //Ceci est-il intelligent ou ne serait-ce qu'utile ?
+    /*
     //computing the value of the current objective / create a function for that ?
     double valObjectif= 0.0;
     int itemPresent;
@@ -331,7 +331,8 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 	}
     }
     (*objx) = valObjectif;
-	
+    */
+    
     return '\0';
 }
 
