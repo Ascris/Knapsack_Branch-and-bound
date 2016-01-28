@@ -286,7 +286,6 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 	    totalPoidsItems+= it[num_constraints].a;
 	    if(totalPoidsItems > b) return 'u';
 	}
-	printf("Pas encore de contraite\n");
     }
     //if the execution is at this point, there is some space left in the bag
 
@@ -317,11 +316,12 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 		    return 'i';
 	    } else {
 		//the item is too large, we will have to add some part of it
-		
+
+		printf("\nOn passe au fractionnal avec l'item %d qui depasserait du sac (%d > %d)", indiceIt, totalPoidsItems+it[indiceIt].a, b);
 		int subst = indiceIt;
 		int repriseAvanceeIndice;
 		for(repriseAvanceeIndice= subst+1; repriseAvanceeIndice < n; ++repriseAvanceeIndice){
-		    printf("\nOn met a 0 la case : %d sur %d", repriseAvanceeIndice, n);
+		    printf("\nOn met a ? la case : %d sur %d dans constraint", repriseAvanceeIndice, n);
 		    x[repriseAvanceeIndice] = '0';
 		}
 		
