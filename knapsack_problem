@@ -7,29 +7,29 @@
 set I;
 /* items */
 
-param a{i in I};
+param a{i in I} integer;
 /* weight of item */
 
-param c{i in I};
+param c{i in I} integer;
 /* profit of item */
 
-param mw;
+param mw, integer;
 /* max weight in the sack */
 
-param mi;
+param mi, integer;
 /* max items number in the sack */
 
-#var x{i in I};
+var x{i in I}, binary;
 /* 0 or 1 if item is selected */
 
-maximize profit: sum{i in I} c[i];
+maximize profit: sum{i in I} c[i] * x[i];
 /* total profit of items in sack */
 
-/*s.t. size: sum{i in I} x[i] <= mi;*/
-/* add constraint on number of items, with x */
+s.t. size: sum{i in I} x[i] <= mi;
+/* add constraint on number of items */
 
 s.t. weight: sum{i in I} a[i] <= mw;
-/* observe supply limit at plant i */
+/* observe total weight of items is not higher than max weight */
 
 
 data;
