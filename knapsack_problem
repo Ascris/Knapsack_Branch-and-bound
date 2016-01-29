@@ -1,0 +1,52 @@
+# A TRANSPORTATION PROBLEM
+#
+# This problem finds a least cost shipping schedule that meets
+# requirements at markets and supplies at factories.
+#
+
+set I;
+/* items */
+
+param a{i in I};
+/* weight of item */
+
+param c{i in I};
+/* profit of item */
+
+param mw;
+/* max weight in the sack */
+
+param mi;
+/* max items number in the sack */
+
+#var x{i in I};
+/* 0 or 1 if item is selected */
+
+maximize profit: sum{i in I} c[i];
+/* total profit of items in sack */
+
+/*s.t. size: sum{i in I} x[i] <= mi;*/
+/* add constraint on number of items, with x */
+
+s.t. weight: sum{i in I} a[i] <= mw;
+/* observe supply limit at plant i */
+
+
+data;
+
+set I := it1 it2 it3 it4;
+
+param mi := 6;
+param mw := 40;
+
+param a := 	it1 	27
+			it2 	29
+			it3 	23
+			it4 	17;
+
+param c := 	it1 	50
+			it2 	48
+			it3 	49
+			it4 	41;
+
+end;
