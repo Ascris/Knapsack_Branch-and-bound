@@ -28,7 +28,7 @@ maximize profit: sum{i in I} c[i] * x[i];
 s.t. size: sum{i in I} x[i] <= mi;
 /* add constraint on number of items */
 
-s.t. weight: sum{i in I} a[i] <= mw;
+s.t. weight: sum{i in I} a[i] * x[i] <= mw;
 /* observe total weight of items is not higher than max weight */
 
 
