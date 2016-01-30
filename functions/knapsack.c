@@ -302,7 +302,7 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 		totalPoidsItems+= it[indiceIt].a;
 		//the item added to the knapsack will become a condition to check up
 		x[indiceIt]= '1';
-		(*objx)+= (double)it[indiceIt].c;
+// 		(*objx)+= (double)it[indiceIt].c;
 	    } else if (totalPoidsItems+it[indiceIt].a == b){
 		    //the item fills the knapsack until its maximum size ; we add it into the knapsack
 		    (*objx)+= (double)it[indiceIt].c;
