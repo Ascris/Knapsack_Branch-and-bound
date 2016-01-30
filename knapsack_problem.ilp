@@ -31,4 +31,23 @@ s.t. size: sum{i in I} x[i] <= mi;
 s.t. weight: sum{i in I} a[i] * x[i] <= mw;
 /* observe total weight of items is not higher than max weight */
 
+
+data;
+
+set I := it1 it2 it3 it4;
+
+param mi := 6;
+
+param a := 	it1 	27
+			it2 	29
+			it3 	23
+			it4 	17;
+
+param mw := 40;
+
+param c := 	it1 	50
+			it2 	48
+			it3 	49
+			it4 	41;
+
 end;

@@ -1,4 +1,8 @@
 #!/usr/local/bin/perl
+
+printf "Transform txt knapsack in data ILP\n";
+printf "";
+
 my $old="$ARGV[0]";
 my $new="$ARGV[1]";
 my $error_write="Impossible to write in $new";
@@ -8,7 +12,7 @@ open(NEW, ">", $new)        or die "Impossible to open $new: $!";
 
 print NEW "data ;\n"	or die $error_write;
 
-printf "write items name ...\n";
+printf "->write items name ...\n";
 print NEW "\nset I := "	or die $error_write;
 while (<OLD>) {
 	if ($. != 1) {
@@ -23,7 +27,7 @@ close(OLD)     or die "Impossible to close $old: $!";
 open(OLD, "<", $old)        or die "Impossible to reopen $old: $!";
 
 
-printf "write size parameters ...\n";
+printf "->write size parameters ...\n";
 
 while (<OLD>) {
 	my @values = split(' ');
@@ -41,7 +45,7 @@ print NEW " ;\n"	or die $error_write;
 close(OLD)     or die "Impossible to close $old: $!";
 open(OLD, "<", $old)        or die "Impossible to reopen $old: $!";
 
-printf "write profit parameters ...\n";
+printf "->write profit parameters ...\n";
 
 while (<OLD>) {
 	my @values = split(' ');
@@ -61,4 +65,6 @@ print NEW "\nend;\n"	or die $error_write;
 # Close files
 close(OLD)     or die "Impossible de close $old: $!";
 close(NEW)     or die "Impossible de close $new: $!";
+
+printf "DONE\n";
 
