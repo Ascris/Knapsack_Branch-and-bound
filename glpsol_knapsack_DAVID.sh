@@ -1,7 +1,9 @@
 #!/bin/sh
 
-#to edit to change student
+#to change student to edit STUDENT_NAME
 STUDENT_NAME="DAVID_Florian"
+
+FILES_PATH="/resources"
 
 echo "Apply glpsol on ILP formulation on -knapsack_problem.ilp- file write in  MathProlog language"
 echo ""
@@ -12,13 +14,13 @@ if [ -e $file ]; then
 else 
 	echo "Data file does not exists, creating it with perl script ..."
 	echo ""
-	perl ./txt_to_data-ilp.pl ./txtfiles/$STUDENT_NAME.txt $STUDENT_NAME.data.ilp
+	perl .$FILES_PATH/txt_to_data-ilp.pl .$FILES_PATH/$STUDENT_NAME.txt .$FILES_PATH/$STUDENT_NAME.data.ilp
 	echo ""
 	echo ""
 	echo "Launching glpsol ..."
 fi 
 
-glpsol --math knapsack_problem.ilp --data $STUDENT_NAME.data.ilp --wlp out.cplex
+glpsol --math .$FILES_PATH/knapsack_problem.ilp --data .$FILES_PATH/$STUDENT_NAME.data.ilp --wlp .$FILES_PATH/out.cplex
 
 #echo ""
 #echo "---Display file output : ---"
