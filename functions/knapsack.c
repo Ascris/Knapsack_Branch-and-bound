@@ -273,7 +273,6 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
      * When we meet this one, we won't need any of the remaining items (so we put their value in x to '0')
      */
     
-    
     //if the total size of all the items presents in the knapsack exceeds the knapsack size, the problem is infeasible
     int num_constraints, total_constraint_items = 0;
     unsigned int totalPoidsItems = 0;
@@ -284,12 +283,12 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 	    ++total_constraint_items;
 	    printdebug("\ntotalPoidsItems = %d -> ajout de l'item %d de poids %d", totalPoidsItems, it[num_constraints].id, it[num_constraints].a);
 	    totalPoidsItems+= it[num_constraints].a;
-	    if(totalPoidsItems >= b) {
-		printf("\nSolution unfeasible : u");
+	    if(totalPoidsItems > b) {
 		return 'u';
 	    }
 	}
     }
+    
     printdebug("\n*****************\nIl y a %d items dans constraint\n*****************\n", total_constraint_items);
     //if the execution is at this point, there is some space left in the bag
 
@@ -297,7 +296,6 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
     for(indiceIt= 0; indiceIt < n; ++indiceIt){
 	if(constraint[indiceIt] == 'F'){
 	    // Check if the item fits in the bag
-
 	    if(totalPoidsItems+it[indiceIt].a < b){
 		//the item can be added to the knapsack
 		printdebug("\nThe item %d can be added to the knapsack : %d et %d = %d < %d", indiceIt, totalPoidsItems, it[indiceIt].a, totalPoidsItems+it[indiceIt].a, b);
@@ -309,12 +307,12 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 		    //the item fills the knapsack until its maximum size ; we add it into the knapsack
 		    (*objx)+= it[indiceIt].c;
 		    (*frac_item)= -1;
-		    printf("\nSolution feasible : i");
 		    return 'i';
 	    } else {
 		//the item is too large, we will have to add some part of it (fractionnal item)
 
 		printdebug("\nOn passe au fractionnal avec l'item %d qui depasserait du sac (%d > %d)", indiceIt, totalPoidsItems+it[indiceIt].a, b);
+		/*
 		int subst= indiceIt;
 		int repriseAvanceeIndice;
 		x[indiceIt]= '?';
@@ -322,14 +320,13 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 		    printdebug("\nOn met a 0 la case : %d sur %d dans constraint", repriseAvanceeIndice, n);
 		    x[repriseAvanceeIndice]= '0';
 		}
-		
+		*/
 		(*frac_item)= indiceIt;
 		//computing the proportion of the item that is added to the objective value and multiply it by the cost of the item
-		double res= 0.0;
-		res= (((float)(it[indiceIt].a))/((float)(totalPoidsItems)));
+		double res= (((float)(it[indiceIt].a))/((float)(totalPoidsItems)));
+		res *= it[indiceIt].c;
 		printdebug("\nFractionnal adding : %f", res);
-		(*objx)+= (res*(it[indiceIt].c));
-		printf("\nSolution fractionnal : f");
+		(*objx)+= res;
 		return 'f';
 	    }
 	}//if the item is not free, we don't use it
