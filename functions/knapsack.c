@@ -302,29 +302,28 @@ char solveRelaxation(int n, int b, item *it, char *constraint, char *x, double *
 		totalPoidsItems+= it[indiceIt].a;
 		//the item added to the knapsack will become a condition to check up
 		x[indiceIt]= '1';
-		(*objx)+= it[indiceIt].c;
+		(*objx)+= (double)it[indiceIt].c;
 	    } else if (totalPoidsItems+it[indiceIt].a == b){
 		    //the item fills the knapsack until its maximum size ; we add it into the knapsack
-		    (*objx)+= it[indiceIt].c;
+		    (*objx)+= (double)it[indiceIt].c;
 		    (*frac_item)= -1;
 		    return 'i';
 	    } else {
 		//the item is too large, we will have to add some part of it (fractionnal item)
-
 		printdebug("\nOn passe au fractionnal avec l'item %d qui depasserait du sac (%d > %d)", indiceIt, totalPoidsItems+it[indiceIt].a, b);
-		/*
+		
 		int subst= indiceIt;
 		int repriseAvanceeIndice;
-		x[indiceIt]= '?';
 		for(repriseAvanceeIndice= subst+1; repriseAvanceeIndice < n; ++repriseAvanceeIndice){
 		    printdebug("\nOn met a 0 la case : %d sur %d dans constraint", repriseAvanceeIndice, n);
 		    x[repriseAvanceeIndice]= '0';
 		}
-		*/
+		
+		x[indiceIt]= '?';
 		(*frac_item)= indiceIt;
 		//computing the proportion of the item that is added to the objective value and multiply it by the cost of the item
-		double res= (((float)(it[indiceIt].a))/((float)(totalPoidsItems)));
-		res *= it[indiceIt].c;
+		double res= ( ((double)(b-totalPoidsItems)) / (it[indiceIt].a) );
+		res *= (it[indiceIt].c);
 		printdebug("\nFractionnal adding : %f", res);
 		(*objx)+= res;
 		return 'f';
