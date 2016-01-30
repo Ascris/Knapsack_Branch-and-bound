@@ -14,7 +14,7 @@ debug_full: clean debug
 stable:clean
 	$(CC) $(CFLAGS) -o knapsack_branch-and-bound knapsack.c
 clean:
-	rm -vfr *~ knapsack_branch-and-bound
+	rm -vfr *~ knapsack_branch-and-bound *.data.ilp *.cplex
 
 cleanobj:
 	@echo - Nettoyage de fichiers Objets
