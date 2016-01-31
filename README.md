@@ -2,22 +2,13 @@
 Lab Session - Implementation of a branch-and-bound algorithm on the Knapsack problem - Combinatorial Optimization
 
 <h2>Ajouter dans le rapport :</h2>
-- comment compiler : make pour algo seul, make debug_full pour avoir des traces, make clean pour nettoyer fichier générés
-- à quoi servent les 4 scripts bash, comment les modifier pour changer d'élève
-- comment marchent les scripts : lance programme avec paramètres ou appelle script Perl dans dossier resources pour créer fichier mathprog de data (toujours dans dossier resources), si fichier déjà crée, non regénéré, on peut forcer avec make clean.
-  - Même indications pour changer d'élève
-- comment on a fait le fichier mathprog (.ilp)
-- comment on a fait le programme
-  - préciser le découpage
   
-    Dans un soucis de lisibilité du programme, le fichier .c initial a été séparé en différents fichiers .c (avec headers associés) pour s'y repérer plus facilement.
+    Dans un soucis de lisibilité du programme, le fichier .c initial a été séparé en différents fichiers .c (avec headers associés).
+    Les structures et fonctions déjà présentes dans le fichier original n'ont pas été modifiées, seulement ordonnées. Les structures sont dans des .h et les fonctions dans des .c . Nous avons ajouté la signature des fonctions dans les fichiers .h, avec les structures correspondantes auquelles elles s'appliquent.
     Ainsi, les fichiers item.c, queue.c et tree.c contiennent toutes les structures et/ou fonctions associées aux items, aux queues ou aux trees.
-    Le fichier knapsack contient les fonctions utiles à la résolution du probleme.
-    
-  - expliquer ce que l'on a modifié ou seulement déplacé (modifié que ce qu'il y avait à modifier sauf knapsack.c)
-  - dire que l'on a ajouté 2 fonctions pour la lecture du fichier, en plus de loadInstance()
-  - Expliquer l'algo
-  
+    Le fichier knapsack.c contient les fonctions utiles à la résolution du probleme. Deux fonctions utiles à la lecture de fichier dans loadInstance ont été ajoutées dans knapsack.
+    Les fichiers others.h et others.c contiennent une fonction printdebug, affichant avec le même format qu'un printf (attribut de compilation pour gcc ajouté dans le .h afin de contrôler le respect de ce format) seulement si une variable préprocesseur DEBUG a pour valeur 1. Sinon la fonction printdebug n'a aucun effet. La variable DEBUG est définie lors de la compilation, l'option 'debug_full' du Makefile permet ainsi d'afficher un suivi du programme lors de son exécution, mais ralentit fortement celle-ci.
+
     En reprenant l'exemple du cours, pour solveRelaxation, nous avons procédé comme ceci :
 	-> Grâce à constraint, on sait quel item est déjà dans le sac : on ajoute ces items à x (le tableau de prensence des items que l'on modifie)
 	-> On calcule totalPoidsItems, qui va indiquer s'il reste de la place dans le sac ou pas. S'il n'y a plus de place, on retourne 'u' (le probleme est fractionnel)
@@ -35,3 +26,17 @@ Lab Session - Implementation of a branch-and-bound algorithm on the Knapsack pro
 	Problemes pour comprendre l'articulation du programme , l'interdépendance des fonctions entre elles.
 	Problemes pour gérer le cas où l'item est fractionné : cast necessaire
 	
+Instructions de compilation :
+- Utiliser la commande make dans un terminal compile le programme.
+- L'option du Makefile 'debug_full' permet d'avoir les traces complètes lors de l'exécution.
+- 'make clean' permet de nettoyer fichier générés
+
+Instructions d'exécution :
+- Programme C :
+	- Lancer les scripts DAVID_Florian.sh et GARNIER_Antoine.sh depuis permet de lancer l'exécution du programme avec le fichier .txt correspondant à l'étudiant.
+	- Pour utiliser d'autres fichiers, on peut soit copier un des scripts et modifier la ligne où le 'STUDENT_NAME' est définie,  avec le nom d'un fichier qui aura été placé dans le dossier 'resources' au prélable (sans l'extension, qui doit être '.txt'), ou appeler directement le programme en ligne de commande avec le nom du fichier en paramètre.
+- GLPSOL :
+	- Lancer les scripts glpsol_knapsack_DAVID.sh et glpsol_knapsack_GARNIER.sh depuis permet de lancer l'exécution du solver glpsol sur avec le fichier .txt correspondant à l'étudiant. Ces scripts lancent le solver avec un fichier .ilp, contenant les parmètres et contraintes du problème, et un fichier .ilp avec les données sur lesquelles travailler.
+	- Ces scripts vérifient qu'il existe de fichier ilp contenant les données (fichier contenant la partie 'data;' du problème) pour l'élève. Si ce fichier n'existe pas (il doit avoir un nom de la forme "[STUDENT_Name].data.ilp"), un script Perl prenant en paramètres le nom fichier texte et un nom de fichier de sortie est exécuté et génère le fichier de données à utiliser.
+	- Pour utiliser d'autres fichiers texte, on peut ici aussi modifier le 'STUDENT_NAME' dans le script, avec le nom d'un fichier qui aura été placé dans le dossier 'resources'.
+	- Les fichiers générés pas l'exécution de ces scripts peuvent être effacé avec l'exécution de 'make clean'.
