@@ -1,8 +1,6 @@
 # Knapsack_Branch-and-bound
-Lab Session - Implementation of a branch-and-bound algorithm on the Knapsack problem - Combinatorial Optimization
+## Lab Session - Implementation of a branch-and-bound algorithm on the Knapsack problem - Combinatorial Optimization
 
-<h2>Ajouter dans le rapport :</h2>
-  
     Dans un soucis de lisibilité du programme, le fichier .c initial a été séparé en différents fichiers .c (avec headers associés).
     Les structures et fonctions déjà présentes dans le fichier original n'ont pas été modifiées, seulement ordonnées. Les structures sont dans des .h et les fonctions dans des .c . Nous avons ajouté la signature des fonctions dans les fichiers .h, avec les structures correspondantes auquelles elles s'appliquent.
     Ainsi, les fichiers item.c, queue.c et tree.c contiennent toutes les structures et/ou fonctions associées aux items, aux queues ou aux trees.
@@ -16,18 +14,19 @@ Lab Session - Implementation of a branch-and-bound algorithm on the Knapsack pro
 		--> Si l'item i à déjà une contrainte appliquée sur lui (constraint = 0 ou 1) alors on ne fait rien
 		--> Sinon, l'item doit être traité :
 			-> Soit l'item rentre entierement dans le sac et il reste de la place : on ajoute l'item au sac et on l'indique avec x{i]='1'
-			-> Soit l'item rentre tout pile dans le sac : on l'ajoute et on retourne 'i', la solution est entière
+			-> Soit l'item rentre exactement dans le sac : on l'ajoute et on retourne 'i', la solution est entière
 			-> Soit l'item ne rentre pas dans le sac et on doit fractionner :
 				==> On calcule la proportion de l'item qui va dans le sac et on ajoute le profit correspondant dans objx.
 				==> L'item n'est pas rentré en entier dans le sac donc x{i]='?', les items suivants ont x[i]='0'
 				==> On retourne 'f', le probleme est fractionnel
 	
-Instructions de compilation :
+### Instructions de compilation :
 - Utiliser la commande make dans un terminal compile le programme.
 - L'option du Makefile 'debug_full' permet d'avoir les traces complètes lors de l'exécution.
 - 'make clean' permet de nettoyer fichier générés
+- Remarque : la "fonctionnalité" verbose n'est pas utilisable tel quelle par l'utilisateur, il faut modifier la ligne ou la variable globale apparait puis recompiler. Nous avons pensé que cette fonctionnalité n'était pas utile dans la version "release" du programme, mais avant tout pour la vérification du fonctionnement de l'algorithme et la résolution de bugs.
 
-Instructions d'exécution :
+### Instructions d'exécution :
 - Programme C :
 	- Lancer les scripts DAVID_Florian.sh et GARNIER_Antoine.sh depuis permet de lancer l'exécution du programme avec le fichier .txt correspondant à l'étudiant.
 	- Pour utiliser d'autres fichiers, on peut soit copier un des scripts et modifier la ligne où le 'STUDENT_NAME' est définie,  avec le nom d'un fichier qui aura été placé dans le dossier 'resources' au prélable (sans l'extension, qui doit être '.txt'), ou appeler directement le programme en ligne de commande avec le nom du fichier en paramètre.
@@ -37,7 +36,7 @@ Instructions d'exécution :
 	- Pour utiliser d'autres fichiers texte, on peut ici aussi modifier le 'STUDENT_NAME' dans le script, avec le nom d'un fichier qui aura été placé dans le dossier 'resources'.
 	- Les fichiers générés pas l'exécution de ces scripts peuvent être effacé avec l'exécution de 'make clean'.
 				
-Problèmes rencontrés :
+### Problèmes rencontrés :
 - Compréhension de l'articulation du programme , l'interdépendance des fonctions entre elles.
 	- => Comment implémenter l'algorithme dans programme déjà commencé par une autre personne.
 - Gestion du cas où l'item est fractionné : cast necessaire
