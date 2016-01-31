@@ -39,8 +39,7 @@ Instructions d'exécution :
 				
 Problèmes rencontrés :
 - Compréhension de l'articulation du programme , l'interdépendance des fonctions entre elles.
-	-> Comment implémenter l'algorithme dans programme déjà commencé par une autre personne.
+	- => Comment implémenter l'algorithme dans programme déjà commencé par une autre personne.
 - Gestion du cas où l'item est fractionné : cast necessaire
 - Compréhension du la structure d'un fichier Mathprog
 - Conversion d'un fichier texte en fichier de données Mathprog
-	
