@@ -21,10 +21,6 @@ Lab Session - Implementation of a branch-and-bound algorithm on the Knapsack pro
 				==> On calcule la proportion de l'item qui va dans le sac et on ajoute le profit correspondant dans objx.
 				==> L'item n'est pas rentré en entier dans le sac donc x{i]='?', les items suivants ont x[i]='0'
 				==> On retourne 'f', le probleme est fractionnel
-				
-  - Expliquer les problèmes
-	Problemes pour comprendre l'articulation du programme , l'interdépendance des fonctions entre elles.
-	Problemes pour gérer le cas où l'item est fractionné : cast necessaire
 	
 Instructions de compilation :
 - Utiliser la commande make dans un terminal compile le programme.
@@ -40,3 +36,11 @@ Instructions d'exécution :
 	- Ces scripts vérifient qu'il existe de fichier ilp contenant les données (fichier contenant la partie 'data;' du problème) pour l'élève. Si ce fichier n'existe pas (il doit avoir un nom de la forme "[STUDENT_Name].data.ilp"), un script Perl prenant en paramètres le nom fichier texte et un nom de fichier de sortie est exécuté et génère le fichier de données à utiliser.
 	- Pour utiliser d'autres fichiers texte, on peut ici aussi modifier le 'STUDENT_NAME' dans le script, avec le nom d'un fichier qui aura été placé dans le dossier 'resources'.
 	- Les fichiers générés pas l'exécution de ces scripts peuvent être effacé avec l'exécution de 'make clean'.
+				
+Problèmes rencontrés :
+	- Compréhension de l'articulation du programme , l'interdépendance des fonctions entre elles.
+	-> Comment implémenter l'algorithme dans programme déjà commencé par une autre personne.
+	- Gestion du cas où l'item est fractionné : cast necessaire
+	- Compréhension du la structure d'un fichier Mathprog
+	- Conversion d'un fichier texte en fichier de données Mathprog
+	
