@@ -19,7 +19,7 @@ param mw, integer;
 param mi, integer;
 /* max items number in the sack */
 
-var x{i in I}, binary;
+var x{i in I} binary;
 /* 0 or 1 if item is selected */
 
 maximize profit: sum{i in I} c[i] * x[i];
@@ -31,6 +31,11 @@ s.t. size: sum{i in I} x[i] <= mi;
 s.t. weight: sum{i in I} a[i] * x[i] <= mw;
 /* observe total weight of items is not higher than max weight */
 
+solve;
+
+printf "The knapsack contains items:\n";
+printf {i in I: x[i] == 1} " %s", i;
+printf "\n At the end of the algorithm\n";
 
 data;
 
