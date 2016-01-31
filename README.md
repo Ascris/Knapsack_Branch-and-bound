@@ -43,3 +43,4 @@
 - Gestion du cas où l'item est fractionné : cast necessaire
 - Compréhension du la structure d'un fichier Mathprog
 - Conversion d'un fichier texte en fichier de données Mathprog
+- + Les résultat obtenu avec le programme C ne concordent pas avec ceux trouvés en utilisant GLPK, nous n'avons pas réussi à comprendre cette incohérence.
