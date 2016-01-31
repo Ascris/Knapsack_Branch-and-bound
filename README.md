@@ -38,9 +38,9 @@ Instructions d'exécution :
 	- Les fichiers générés pas l'exécution de ces scripts peuvent être effacé avec l'exécution de 'make clean'.
 				
 Problèmes rencontrés :
-	- Compréhension de l'articulation du programme , l'interdépendance des fonctions entre elles.
+- Compréhension de l'articulation du programme , l'interdépendance des fonctions entre elles.
 	-> Comment implémenter l'algorithme dans programme déjà commencé par une autre personne.
-	- Gestion du cas où l'item est fractionné : cast necessaire
-	- Compréhension du la structure d'un fichier Mathprog
-	- Conversion d'un fichier texte en fichier de données Mathprog
+- Gestion du cas où l'item est fractionné : cast necessaire
+- Compréhension du la structure d'un fichier Mathprog
+- Conversion d'un fichier texte en fichier de données Mathprog
 	
