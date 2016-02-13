@@ -39,3 +39,4 @@
 ./txtfile/*
 *.layout
 *.depend
+*.txt
